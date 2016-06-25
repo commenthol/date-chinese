@@ -1,17 +1,50 @@
 {
   "name": "date-chinese",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Chinese Calendar",
+  "main": "lib",
+  "engines": {
+    "node": ">=0.12.0"
+  },
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers js:babel-register --check-leaks test/*.mocha.js",
+    "cover": "istanbul cover _mocha -- test/*.mocha.js --reporter dot ",
+    "lint": "eslint --quiet '**/*.js'",
+    "transpile": "babel src --out-dir lib",
+    "dev": "babel --watch src --out-dir lib"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/commenthol/date-chinese.git"
+  },
+  "keywords": [
+    "chinese",
+    "calendar",
+    "gregorian",
+    "conversion"
+  ],
+  "author": "commenthol <commenthol@gmail.com>",
+  "maintainers": "commenthol <commenthol@gmail.com>",
   "dependencies": {
-    "astronomia": "^0.1.0"
+    "astronomia": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.10.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
+    "eslint": "^3.1.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "mocha": "^2.5.3"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "standard"
   }
 }
