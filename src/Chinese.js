@@ -40,6 +40,8 @@ class CalendarChinese {
   constructor (cycle, year, month, leap, day) {
     this.set(cycle, year, month, leap, day)
 
+    this._epochY = epochY
+    this._epoch = epoch
     this._cache = { // cache for results
       lon: {},
       sue: {},
@@ -91,7 +93,7 @@ class CalendarChinese {
    * @return {Number} year
    */
   yearFromEpochCycle () {
-    return epochY + (this.cycle - 1) * 60 + (this.year - 1)
+    return this._epochY + (this.cycle - 1) * 60 + (this.year - 1)
   }
 
   /**
@@ -152,7 +154,7 @@ class CalendarChinese {
       nm = ny
     }
 
-    let years = 1.5 + (ny - epoch) / base.BesselianYear
+    let years = 1.5 + (ny - this._epoch) / base.BesselianYear
     this.cycle = 1 + Math.trunc((years - 1) / 60)
     this.year = 1 + Math.trunc((years - 1) % 60)
 
