@@ -89,7 +89,7 @@ class CalendarChinese {
   }
 
   /**
-   * get year from Epoch / Cycle
+   * get Gregorian year from Epoch / Cycle
    * @return {Number} year
    */
   yearFromEpochCycle () {
@@ -238,7 +238,7 @@ class CalendarChinese {
    * timeshift to UTC
    *
    * @param {Number} gyear - gregorian year
-   * @return {Number} timshift in fraction of day
+   * @return {Number} timeshift in fraction of day
    */
   timeshiftUTC (gyear) {
     if (gyear >= 1929) {

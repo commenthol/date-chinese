@@ -3,7 +3,6 @@ coverage/
 output/
 test/
 tmp/
-src/
 Makefile
 *.map
 *.log

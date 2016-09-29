@@ -8,11 +8,7 @@ const julian = require('astronomia').julian
 
 const CalendarVietnamese = require('..').CalendarVietnamese
 
-process.env.TZ = 'Asia/Ho_Chi_Minh'
-
-function toDate (jde) {
-  return new julian.Calendar().fromJDE(jde).toDate()
-}
+// process.env.TZ = 'Asia/Ho_Chi_Minh'
 
 describe('#CalendarVietnamese', function () {
   describe('newYear', function () {
@@ -62,7 +58,7 @@ describe('#CalendarVietnamese', function () {
       let cal = new CalendarVietnamese()
       tests.forEach(function (t) {
         let [y, m, d] = t.d
-        it(t.d, function () {
+        it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
           assert.deepEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
         })

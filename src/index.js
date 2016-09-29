@@ -5,7 +5,7 @@
 
 module.exports = {
   CalendarChinese: require('./Chinese'),
-  // CalendarJapanese: require('./Japanese'),
   CalendarKorean: require('./Korean'),
-  CalendarVietnamese: require('./Vietnamese')
+  CalendarVietnamese: require('./Vietnamese'),
+  CalendarJapanese: require('./Japanese')
 }

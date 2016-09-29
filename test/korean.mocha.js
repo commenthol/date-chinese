@@ -8,7 +8,7 @@ const julian = require('astronomia').julian
 
 const CalendarKorean = require('..').CalendarKorean
 
-// process.env.TZ = 'Asia/Ho_Chi_Minh'
+// process.env.TZ = 'Asia/Seoul'
 
 describe('#CalendarKorean', function () {
   describe('newYear', function () {
@@ -58,7 +58,7 @@ describe('#CalendarKorean', function () {
       let cal = new CalendarKorean()
       tests.forEach(function (t) {
         let [y, m, d] = t.d
-        it(t.d, function () {
+        it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
           assert.deepEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
         })

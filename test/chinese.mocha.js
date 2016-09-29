@@ -215,7 +215,7 @@ describe('#CalendarChinese', function () {
       let cal = new CalendarChinese()
       tests.forEach(function (t) {
         let [y, m, d] = t.d
-        it(t.d, function () {
+        it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
           assert.deepEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
         })

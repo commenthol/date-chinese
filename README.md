@@ -15,9 +15,11 @@ The module supports:
 - calculation of chinese New Year for a given Gregorian year
 - calculation of Qı̄ngmíng pure brightness festival
 - calculation of solar terms (minor - Jiéqì / major - Zhōngqì)
+- calculations of Korean, Vietnamese Calendar based on the Chinese but using a different meridian
+- calculations of Japanese solar terms (sekki)
 
-**Note:** Some calculations may take quite some time (> 40ms). Therefore 
-`CalendarChinese` has a built in cache to store results of long running 
+**Note:** Some calculations may take quite some time (> 40ms). Therefore
+`CalendarChinese` has a built in cache to store results of long running
 calculations.
 
 
@@ -26,6 +28,7 @@ calculations.
 <!-- !toc (minlevel=2 omit="Table of Contents") -->
 
 * [Usage](#usage)
+  * [Construct a new Chinese Date](#construct-a-new-chinese-date)
   * [from Gregorian Date](#from-gregorian-date)
   * [to Gregorian Date](#to-gregorian-date)
   * [from Date](#from-date)
@@ -33,6 +36,10 @@ calculations.
   * [Chinese New Year](#chinese-new-year)
   * [Qı̄ngmíng](#qı̄ngmíng)
   * [Solar Terms](#solar-terms)
+* [Japanese Calendar](#japanese-calendar)
+  * [Sekki](#sekki)
+* [Korean Calendar](#korean-calendar)
+* [Vietnamese Calendar](#vietnamese-calendar)
 * [Contribution and License Agreement](#contribution-and-license-agreement)
 * [License](#license)
 * [References](#references)
@@ -45,14 +52,10 @@ calculations.
 
 **Parameters**
 
-**cycle**: `Number | Array | Object`, chinese 60 year cicle; if `{Array}` than `[cycle, year, ..., day]`
-
-**year**: `Number`, chinese year in cycle
-
-**month**: `Number`, chinese month
-
-**leap**: `Number`, `true` if leap month
-
+**cycle**: `Number | Array | Object`, chinese 60 year cicle; if `{Array}` than `[cycle, year, ..., day]`  
+**year**: `Number`, chinese year in cycle  
+**month**: `Number`, chinese month  
+**leap**: `Number`, `true` if leap month  
 **day**: `Number`, chinese day
 
 
@@ -63,34 +66,13 @@ cal.get()
 //> [ 78, 1, 10, true, 9 ]
 ```
 
-or
-
-```js
-const CalendarChinese = require('date-chinese')
-let cdate = [ 78, 1, 10, true, 9 ]
-let cal = new CalendarChinese(cdate)
-cal.get()
-//> [ 78, 1, 10, true, 9 ]
-```
-
-or via setter
-
-```js
-const CalendarChinese = require('date-chinese')
-let cdate = [ 78, 1, 10, true, 9 ]
-let cal = new CalendarChinese()
-cal.set(cdate)
-cal.get()
-//> [ 78, 1, 10, true, 9 ]
-```
-
 `CalenderChinese` uses an internal cache for long running calculations.
 Use `set()` to reuse cached results.
 
 
 ### from Gregorian Date
 
-The timezone of the gregorian date is Chinese Standard Time (Bejing Time for years less than 1929).
+The timezone of the Gregorian Date is Chinese Standard Time (Bejing Time for years less than 1929).
 
 ```js
 const CalendarChinese = require('date-chinese')
@@ -110,7 +92,7 @@ let [cycle, year, month, leap, day] = cal.get()
 
 ### to Gregorian Date
 
-Convert chinese date back to gregorian date
+Convert Chinese Date back to Gregorian Date
 
 ```js
 let cal = new CalendarChinese(78, 1, 10, true, 9)
@@ -225,12 +207,52 @@ let gdate = cal.toGregorian()
 //> { year: 1985, month: 4, day: 5 }
 ```
 
+## Japanese Calendar
+
+Epoch start for the Japanese Calendar in unknown. So Chinese Epoch in 2636 BCE is *wrongly* used.
+
+### Sekki
+
+```js
+const CalendarJapanese = require('date-chinese').CalendarJapanese
+let cal = new CalendarJapanese()
+let qm = cal.solarTerm(1, 2016)
+cal.fromJDE(qm)
+let gdate = cal.toGregorian()
+//> { year: 2016, month: 2, day: 4 }
+```
+
+## Korean Calendar
+
+Epoch start in 2333 BCE
+
+```js
+const CalendarKorean = require('date-chinese').CalendarKorean
+let cal = new CalendarKorean(73, 13, 11, false, 25)
+let gdate = cal.toGregorian()
+//> { year: 2000, month: 1, day: 1 }
+```
+
+## Vietnamese Calendar
+
+Epoch start for the Vietnamese Calendar in unknown. So Chinese Epoch in 2636 BCE is maybe *wrongly* used.
+
+```js
+const CalendarVietnamese = require('date-chinese').CalendarVietnamese
+let cal = new CalendarVietnamese()
+cal.fromGregorian(1985,  3, 22)
+let cdate = cal.get()
+//> [ 78, 2, 2, true, 2 ]
+let gyear = cal.yearFromEpochCycle()
+//> 1985
+```
+
 ## Contribution and License Agreement
 
 If you contribute code to this project, you are implicitly allowing your
 code to be distributed under the MIT license. You are also implicitly
 verifying that all code is your original work or correctly attributed
-with the source of its origin and licence.
+with the source of its origin and License.
 
 ## License
 
