@@ -38,7 +38,7 @@
   "author": "commenthol <commenthol@gmail.com>",
   "maintainers": "commenthol <commenthol@gmail.com>",
   "dependencies": {
-    "astronomia": "^1.0.1"
+    "astronomia": "^1.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.16.0",
