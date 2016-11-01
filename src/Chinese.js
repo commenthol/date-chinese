@@ -237,11 +237,11 @@ class CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {Number} gyear - gregorian year
+   * @param {CalendarGregorian} gcal - gregorian calendar date
    * @return {Number} timeshift in fraction of day
    */
-  timeshiftUTC (gyear) {
-    if (gyear >= 1929) {
+  timeshiftUTC (gcal) {
+    if (gcal.toYear() >= 1929) {
       return 8 / 24         // +8:00:00h Standard China time zone (120° East)
     }
     return 1397 / 180 / 24  // +7:45:40h Beijing (116°25´ East)
@@ -254,10 +254,10 @@ class CalendarChinese {
    * @return {Number} truncated jde
    */
   midnight (jde) {
-    let c = new julian.CalendarGregorian().fromJDE(jde)
-    let ts = 0.5 - this.timeshiftUTC(c.toYear())
-    let mn = Math.trunc(c.toJD() - ts) + ts
-    mn = c.fromJD(mn).toJDE()
+    let gcal = new julian.CalendarGregorian().fromJDE(jde)
+    let ts = 0.5 - this.timeshiftUTC(gcal)
+    let mn = Math.trunc(gcal.toJD() - ts) + ts
+    mn = gcal.fromJD(mn).toJDE()
     if (toFixed(jde, 5) === toFixed(mn, 5) + 1) {
       return jde
     }

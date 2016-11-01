@@ -100,9 +100,9 @@ describe('#CalendarChinese', function () {
         let gre = cal.toGregorian()
         assert.deepEqual(gre, test[1])
         // converting to Gregorian using jde
-        let date = new julian.CalendarGregorian().fromJDE(qm).toDate()
-        let ts = cal.timeshiftUTC(date.getFullYear())
-        date = new Date(+date + ts * 86400000)
+        let gcal = new julian.CalendarGregorian().fromJDE(qm)
+        let ts = cal.timeshiftUTC(gcal)
+        let date = new Date(+(gcal.toDate()) + ts * 86400000)
         assert.equal(date.toISOString(), test[2])
       })
     })
