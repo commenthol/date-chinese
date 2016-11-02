@@ -1,6 +1,6 @@
 {
   "name": "date-chinese",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Chinese Calendar",
   "main": "lib",
   "jsnext:main": "src",
