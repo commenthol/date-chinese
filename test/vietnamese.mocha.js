@@ -6,7 +6,7 @@
 const assert = require('assert')
 const julian = require('astronomia').julian
 
-const CalendarVietnamese = require('..').CalendarVietnamese
+const CalendarVietnamese = require('../src').CalendarVietnamese
 
 // process.env.TZ = 'Asia/Ho_Chi_Minh'
 

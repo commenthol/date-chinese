@@ -38,17 +38,19 @@
   "author": "commenthol <commenthol@gmail.com>",
   "maintainers": "commenthol <commenthol@gmail.com>",
   "dependencies": {
-    "astronomia": "^1.1.0"
+    "astronomia": "^1.1.1"
   },
   "devDependencies": {
     "babel-core": "^6.16.0",
     "babel-preset-es2015": "^6.16.0",
     "babel-register": "^6.16.3",
+    "mocha": "^3.1.2"
+  },
+  "optionalDependencies": {
     "eslint": "^3.7.0",
     "eslint-config-standard": "^6.2.0",
-    "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.1",
-    "mocha": "^3.1.0"
+    "eslint-plugin-promise": "^3.3.0",
+    "eslint-plugin-standard": "^2.0.1"
   },
   "babel": {
     "presets": [

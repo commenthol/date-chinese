@@ -6,6 +6,14 @@
 const CalendarChinese = require('./Chinese')
 
 /**
+ * @see http://law.e-gov.go.jp/htmldata/M19/M19CO051.html
+ */
+const UTC_DATES = [
+  { date: new Date('1888-02-11T15:00:00.000Z'), // 1888-02-12T00:00:00+0900
+    shift: 9 / 24 }  // +9:00:00h (135° East) Japanese standard meridian
+]
+
+/**
  * Note: I could not find details about the epoch(s) for the year zero of the
  * Japanese calendar dating before 1873. Therefore this calendar uses (wrongly)
  * the Chinese epoch.
@@ -35,11 +43,17 @@ class CalendarJapanese extends CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {Number} gyear - gregorian year
+   * @param {CalendarGregorian} gcal - gregorian calendar date
    * @return {Number} timeshift in fraction of day
    */
-  timeshiftUTC (gyear) {
-    return 9 / 24  // +9:00:00h (135° East) Japanese standard meridian
+  timeshiftUTC (gcal) {
+    let date = gcal.toDate()
+    for (var i in UTC_DATES) {
+      if (date >= UTC_DATES[i].date) {
+        return UTC_DATES[i].shift
+      }
+    }
+    return 4193 / 450 / 24 // +9:19:04h (139°46'E)
   }
 }
 module.exports = CalendarJapanese
