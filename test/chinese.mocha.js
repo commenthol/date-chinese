@@ -38,6 +38,46 @@ describe('#CalendarChinese', function () {
     })
   })
 
+  describe('conversions', function () {
+    var tests = [
+      {date: new Date('1980-12-03T00:00:00+0800'), chinese: [77, 57, 10, false, 26]},
+      {date: new Date('2017-01-28T00:00:00+0800'), chinese: [78, 34, 1, false, 1]},
+      {date: new Date('1988-02-21T15:59:59.255Z'), chinese: [78, 5, 1, false, 6]} // special condition for `midnight` where jde === mn
+    ]
+
+    describe('from Date to chinese', function () {
+      tests.forEach((test) => {
+        it(test.date.toISOString(), function () {
+          var cal = new CalendarChinese().fromDate(test.date)
+          assert.deepEqual(cal.get(), test.chinese)
+        })
+      })
+    })
+
+    describe('from chinese to Date', function () {
+      function stripIsoSeconds (date) {
+        return date.toISOString().replace(/\d{2}\.\d{3}Z$/, '00Z')
+      }
+
+      tests.forEach((test) => {
+        it(test.date.toISOString(), function () {
+          var cal = new CalendarChinese()
+          cal.set.apply(cal, test.chinese)
+          // console.log(cal.toDate().toISOString()) // gap is ~ 3seconds
+          assert.equal(stripIsoSeconds(cal.toDate()), stripIsoSeconds(test.date))
+        })
+      })
+
+      // {date: new Date('1935-04-02T12:00:00+0800'), chinese: [77, 12, 2, false, 29]} // special condition for `jde` where st > this.month
+
+      it('special case at 1935-04-01', function () {
+        var cal = new CalendarChinese(77, 12, 2, false, 29)
+        // console.log(cal.toDate().toISOString())
+        assert.equal(stripIsoSeconds(cal.toDate()), '1935-04-01T15:59:00Z')
+      })
+    })
+  })
+
   describe('midnight', function () {
     const tests = [
       {d: '1984-12-19T23:59:00+0800', exp: '1984-12-19T00:00:00+0800'},
