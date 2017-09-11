@@ -14,9 +14,9 @@ class CalendarVietnamese extends CalendarChinese {
    */
   timeshiftUTC (gcal) {
     if (gcal.toYear() >= 1968) {
-      return 7 / 24		// +7:00:00h
+      return 7 / 24 // +7:00:00h
     }
-    return 8 / 24   	// +8:00:00h Standard China time zone (120° East)
+    return 8 / 24 // +8:00:00h Standard China time zone (120° East)
   }
 }
 module.exports = CalendarVietnamese
