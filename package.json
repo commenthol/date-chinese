@@ -2,55 +2,37 @@
   "name": "date-chinese",
   "version": "1.0.2",
   "description": "Chinese Calendar",
+  "keywords": [
+    "calendar",
+    "chinese",
+    "chinese new year",
+    "conversion",
+    "gregorian",
+    "japanese",
+    "jieqi",
+    "korean",
+    "qingming",
+    "sekki",
+    "vietnamese",
+    "zhongqi"
+  ],
+  "author": "commenthol <commenthol@gmail.com>",
   "main": "lib",
+  "module": "src",
   "jsnext:main": "src",
-  "engines": {
-    "node": ">=0.12.0"
-  },
   "directories": {
     "test": "test"
-  },
-  "scripts": {
-    "test": "mocha --compilers js:babel-register --check-leaks test/*.mocha.js",
-    "cover": "istanbul cover _mocha -- test/*.mocha.js --reporter dot ",
-    "lint": "eslint --quiet '**/*.js'",
-    "transpile": "babel src --out-dir lib",
-    "dev": "babel --watch src --out-dir lib"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/commenthol/date-chinese.git"
   },
-  "keywords": [
-    "chinese",
-    "calendar",
-    "gregorian",
-    "conversion",
-    "chinese new year",
-    "zhongqi",
-    "jieqi",
-    "qingming",
-    "korean",
-    "vietnamese",
-    "japanese",
-    "sekki"
-  ],
-  "author": "commenthol <commenthol@gmail.com>",
-  "maintainers": "commenthol <commenthol@gmail.com>",
-  "dependencies": {
-    "astronomia": "^1.1.1"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.16.0",
-    "babel-preset-es2015": "^6.16.0",
-    "babel-register": "^6.16.3",
-    "eslint": "^3.7.0",
-    "eslint-config-standard": "^6.2.0",
-    "eslint-plugin-promise": "^3.3.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.1.2"
+  "scripts": {
+    "cover": "istanbul cover _mocha -- test/*.mocha.js --reporter dot ",
+    "dev": "babel --watch src --out-dir lib",
+    "lint": "eslint --quiet '**/*.js'",
+    "test": "mocha --compilers js:babel-register --check-leaks test/*.mocha.js",
+    "transpile": "babel src --out-dir lib"
   },
   "babel": {
     "presets": [
@@ -59,5 +41,24 @@
   },
   "eslintConfig": {
     "extends": "standard"
-  }
+  },
+  "dependencies": {
+    "astronomia": "^1.3.5"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^6.2.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^2.3.1",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.5.2"
+  },
+  "engines": {
+    "node": ">=0.12.0"
+  },
+  "maintainers": "commenthol <commenthol@gmail.com>"
 }

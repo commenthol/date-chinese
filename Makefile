@@ -1,7 +1,7 @@
-all: lint transpile readme v6.3
+all: lint transpile readme v8.
 
 lint:
-	eslint --fix --quiet '**/*.js'
+	npm run lint
 
 transpile:
 	npm run transpile
@@ -12,7 +12,7 @@ doc:
 readme:
 	markedpp --githubid -i README.md -o README.md
 
-test: v0.12 v4.4 v6.3
+test: v0.12 v4. v6. v8.
 
 v%:
 	n $@ && npm test
