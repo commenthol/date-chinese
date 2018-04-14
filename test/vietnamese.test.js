@@ -4,9 +4,9 @@
 'use strict'
 
 const assert = require('assert')
-const julian = require('astronomia').julian
+const {julian} = require('astronomia')
 
-const CalendarVietnamese = require('../src').CalendarVietnamese
+const {CalendarVietnamese} = require('../src')
 
 // process.env.TZ = 'Asia/Ho_Chi_Minh'
 

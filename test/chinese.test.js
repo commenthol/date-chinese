@@ -6,9 +6,9 @@
 process.env.TZ = 'Asia/Shanghai'
 
 const assert = require('assert')
-const julian = require('astronomia').julian
+const {julian} = require('astronomia')
 
-const CalendarChinese = require('../src').CalendarChinese
+const {CalendarChinese} = require('../src')
 
 function toDate (jde) {
   return new julian.Calendar().fromJDE(jde).toDate()

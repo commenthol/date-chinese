@@ -3,14 +3,14 @@
  * @license MIT
  */
 
-const CalendarChinese = require('./Chinese')
+import CalendarChinese from './Chinese'
 
 /**
  * @see http://law.e-gov.go.jp/htmldata/M19/M19CO051.html
  */
 const UTC_DATES = [
   { date: new Date('1888-02-11T15:00:00.000Z'), // 1888-02-12T00:00:00+0900
-    shift: 9 / 24 }  // +9:00:00h (135° East) Japanese standard meridian
+    shift: 9 / 24 } // +9:00:00h (135° East) Japanese standard meridian
 ]
 
 /**
@@ -39,7 +39,7 @@ const UTC_DATES = [
  * pre 1873 one) is unknown to me.
  */
 
-class CalendarJapanese extends CalendarChinese {
+export default class CalendarJapanese extends CalendarChinese {
   /**
    * timeshift to UTC
    *
@@ -56,4 +56,3 @@ class CalendarJapanese extends CalendarChinese {
     return 4193 / 450 / 24 // +9:19:04h (139°46'E)
   }
 }
-module.exports = CalendarJapanese

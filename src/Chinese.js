@@ -3,14 +3,9 @@
  * @license MIT
  */
 
-const base = require('astronomia/lib/base')
-const solstice = require('astronomia/lib/solstice')
-const solar = require('astronomia/lib/solar')
-const moonphase = require('astronomia/lib/moonphase')
-const planetpos = require('astronomia/lib/planetposition')
-const julian = require('astronomia/lib/julian')
+import {base, solstice, solar, moonphase, planetposition, julian, data} from 'astronomia'
 
-const earth = new planetpos.Planet(require('astronomia/data/vsop87Bearth.js'))
+const earth = new planetposition.Planet(data.earth)
 const lunarOffset = moonphase.meanLunarMonth / 2
 const p = 180 / Math.PI
 
@@ -27,7 +22,7 @@ function toFixed (val, e) {
   return parseFloat(val.toFixed(e), 10)
 }
 
-class CalendarChinese {
+export default class CalendarChinese {
   /**
    * constructor
    *
@@ -242,9 +237,9 @@ class CalendarChinese {
    */
   timeshiftUTC (gcal) {
     if (gcal.toYear() >= 1929) {
-      return 8 / 24         // +8:00:00h Standard China time zone (120° East)
+      return 8 / 24 // +8:00:00h Standard China time zone (120° East)
     }
-    return 1397 / 180 / 24  // +7:45:40h Beijing (116°25´ East)
+    return 1397 / 180 / 24 // +7:45:40h Beijing (116°25´ East)
   }
 
   /**
@@ -300,10 +295,10 @@ class CalendarChinese {
    * @return {Number} jde at midnight
    */
   nextNewMoon (jde) {
-    let nm = this.midnight(moonphase.new(toYear(jde)))
+    let nm = this.midnight(moonphase.newMoon(toYear(jde)))
     let cnt = 0
     while (nm < jde && cnt++ < 4) {
-      nm = this.midnight(moonphase.new(toYear(jde + cnt * lunarOffset)))
+      nm = this.midnight(moonphase.newMoon(toYear(jde + cnt * lunarOffset)))
     }
     return nm
   }
@@ -315,10 +310,10 @@ class CalendarChinese {
    * @return {Number} jde at midnight
    */
   previousNewMoon (jde) {
-    let nm = this.midnight(moonphase.new(toYear(jde)))
+    let nm = this.midnight(moonphase.newMoon(toYear(jde)))
     let cnt = 0
     while (nm > jde && cnt++ < 4) {
-      nm = this.midnight(moonphase.new(toYear(jde - cnt * lunarOffset)))
+      nm = this.midnight(moonphase.newMoon(toYear(jde - cnt * lunarOffset)))
     }
     return nm
   }
@@ -399,4 +394,3 @@ class CalendarChinese {
     return this.solarTerm(5, gyear)
   }
 }
-module.exports = CalendarChinese

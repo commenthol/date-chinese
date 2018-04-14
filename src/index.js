@@ -3,9 +3,7 @@
  * @license MIT
  */
 
-module.exports = {
-  CalendarChinese: require('./Chinese'),
-  CalendarKorean: require('./Korean'),
-  CalendarVietnamese: require('./Vietnamese'),
-  CalendarJapanese: require('./Japanese')
-}
+export {default as CalendarChinese} from './Chinese'
+export {default as CalendarKorean} from './Korean'
+export {default as CalendarVietnamese} from './Vietnamese'
+export {default as CalendarJapanese} from './Japanese'

@@ -3,9 +3,9 @@
  * @license MIT
  */
 
-const CalendarChinese = require('./Chinese')
+import CalendarChinese from './Chinese'
 
-class CalendarVietnamese extends CalendarChinese {
+export default class CalendarVietnamese extends CalendarChinese {
   /**
    * timeshift to UTC
    *
@@ -19,4 +19,3 @@ class CalendarVietnamese extends CalendarChinese {
     return 8 / 24 // +8:00:00h Standard China time zone (120° East)
   }
 }
-module.exports = CalendarVietnamese
