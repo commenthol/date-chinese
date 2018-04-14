@@ -3,7 +3,8 @@
  * @license MIT
  */
 
-import {julian} from 'astronomia'
+// import {julian} from 'astronomia' // TODO waiting for tree-shaking that works...
+import julian from 'astronomia/lib/julian'
 import CalendarChinese from './Chinese'
 
 // Start of Korean Calendar in 2333 BCE (단군기원 http://ko.wikipedia.org/wiki/단기)
@@ -25,7 +26,7 @@ const UTC_DATES = [
     shift: 8.5 / 24 }
 ]
 
-class CalendarKorean extends CalendarChinese {
+export default class CalendarKorean extends CalendarChinese {
   constructor (cycle, year, month, leap, day) {
     super(cycle, year, month, leap, day)
 
@@ -49,4 +50,3 @@ class CalendarKorean extends CalendarChinese {
     return 3809 / 450 / 24 // +8:27:52h Seoul City Hall 126°58'E
   }
 }
-module.exports = CalendarKorean

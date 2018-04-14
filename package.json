@@ -1,6 +1,6 @@
 {
   "name": "date-chinese",
-  "version": "1.0.4",
+  "version": "1.0.5-0",
   "description": "Chinese Calendar",
   "keywords": [
     "calendar",
@@ -23,8 +23,6 @@
   "license": "MIT",
   "author": "commenthol <commenthol@gmail.com>",
   "main": "lib",
-  "module": "es",
-  "jsnext:main": "es",
   "directories": {
     "test": "test"
   },
@@ -34,8 +32,7 @@
   },
   "scripts": {
     "all": "npm run clean && npm run lint && npm run build && npm test",
-    "build": "npm run build:cjs && npm run build:es5",
-    "build:cjs": "babel -d lib src",
+    "build": "babel -d lib src",
     "build:es5": "BABEL_ENV=es5 babel -d es src",
     "clean": "rimraf lib es coverage .nyc_output",
     "clean:all": "rimraf node_modules && npm run clean",

@@ -3,9 +3,16 @@
  * @license MIT
  */
 
-import {base, solstice, solar, moonphase, planetposition, julian, data} from 'astronomia'
+// import {base, solstice, solar, moonphase, planetposition, julian, data} from 'astronomia' // TODO waiting for tree-shaking that works...
+import base from 'astronomia/lib/base'
+import solstice from 'astronomia/lib/solstice'
+import solar from 'astronomia/lib/solar'
+import moonphase from 'astronomia/lib/moonphase'
+import planetposition from 'astronomia/lib/planetposition'
+import julian from 'astronomia/lib/julian'
+import dataEarth from 'astronomia/data/vsop87Bearth'
 
-const earth = new planetposition.Planet(data.earth)
+const earth = new planetposition.Planet(dataEarth)
 const lunarOffset = moonphase.meanLunarMonth / 2
 const p = 180 / Math.PI
 
