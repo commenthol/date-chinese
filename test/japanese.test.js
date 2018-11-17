@@ -4,9 +4,9 @@
 'use strict'
 
 const assert = require('assert')
-const {julian} = require('astronomia')
+const { julian } = require('astronomia')
 
-const {CalendarJapanese} = require('../src')
+const { CalendarJapanese } = require('../src')
 
 process.env.TZ = 'Asia/Tokyo'
 
@@ -64,7 +64,7 @@ describe('#CalendarJapanese', function () {
         let [y, m, d] = t.d
         it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
-          assert.deepEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
+          assert.deepStrictEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
         })
       })
     })
@@ -75,7 +75,7 @@ describe('#CalendarJapanese', function () {
         it(t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'), function () {
           let cal = new CalendarJapanese(cycle, year, month, leap, day)
           let res = cal.toGregorian()
-          assert.deepEqual([res.year, res.month, res.day], t.d)
+          assert.deepStrictEqual([res.year, res.month, res.day], t.d)
         })
       })
     })
@@ -126,7 +126,7 @@ describe('#CalendarJapanese', function () {
           it([year, test.sekki].join(' '), function () {
             let jde = cal.solarTerm(test.sekki, year)
             let res = new julian.CalendarGregorian().fromJDE(jde).toDate().toISOString()
-            assert.equal(res, new Date(test.exp).toISOString())
+            assert.strictEqual(res, new Date(test.exp).toISOString())
           })
         })
       })
