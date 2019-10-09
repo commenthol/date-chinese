@@ -17,7 +17,7 @@ function toDate (jde) {
 describe('#CalendarChinese', function () {
   describe('construction', function () {
     let cal
-    let exp = [78, 1, 10, true, 9]
+    const exp = [78, 1, 10, true, 9]
     it('can construct via new', function () {
       cal = new CalendarChinese(78, 1, 10, true, 9)
       assert.ok(cal instanceof CalendarChinese)
@@ -25,14 +25,14 @@ describe('#CalendarChinese', function () {
     })
 
     it('can construct with class instance', function () {
-      let cal1 = new CalendarChinese(cal)
+      const cal1 = new CalendarChinese(cal)
       assert.ok(cal1 instanceof CalendarChinese)
       assert.ok(cal1 !== cal)
       assert.deepStrictEqual(cal.get(), exp)
     })
 
     it('can construct with array', function () {
-      let cal1 = new CalendarChinese(exp)
+      const cal1 = new CalendarChinese(exp)
       assert.ok(cal1 !== cal)
       assert.deepStrictEqual(cal.get(), exp)
     })
@@ -89,14 +89,14 @@ describe('#CalendarChinese', function () {
     const cal = new CalendarChinese()
     tests.forEach(function (t) {
       it(t.d, function () {
-        let c = new julian.Calendar().fromDate(new Date(t.d))
-        let mn = cal.midnight(c.toJDE())
+        const c = new julian.Calendar().fromDate(new Date(t.d))
+        const mn = cal.midnight(c.toJDE())
         assert.strictEqual(toDate(mn).toISOString(), new Date(t.exp).toISOString())
       })
     })
 
     it('can call midnight twice', function () {
-      let c = new julian.Calendar().fromDate(new Date(tests[1].d))
+      const c = new julian.Calendar().fromDate(new Date(tests[1].d))
       let mn = cal.midnight(c.toJDE())
       mn = cal.midnight(mn)
       assert.strictEqual(toDate(mn).toISOString(), new Date(tests[1].exp).toISOString())
@@ -132,58 +132,58 @@ describe('#CalendarChinese', function () {
     ]
 
     tests.forEach(function (test) {
-      let y = test[0]
+      const y = test[0]
       it(y, function () {
-        let cal = new CalendarChinese()
-        let qm = cal.qingming(y)
+        const cal = new CalendarChinese()
+        const qm = cal.qingming(y)
         cal.fromJDE(qm)
-        let gre = cal.toGregorian()
+        const gre = cal.toGregorian()
         assert.deepStrictEqual(gre, test[1])
         // converting to Gregorian using jde
-        let gcal = new julian.CalendarGregorian().fromJDE(qm)
-        let ts = cal.timeshiftUTC(gcal)
-        let date = new Date(+(gcal.toDate()) + ts * 86400000)
+        const gcal = new julian.CalendarGregorian().fromJDE(qm)
+        const ts = cal.timeshiftUTC(gcal)
+        const date = new Date(+(gcal.toDate()) + ts * 86400000)
         assert.strictEqual(date.toISOString(), test[2])
       })
     })
   })
 
   var tests = [
-    [ [ 1, 2016 ],  [ 2016, 2, 4 ],   [ 78, 32, 12, false, 26 ] ],
-    [ [ 2, 2016 ],  [ 2016, 2, 19 ],  [ 78, 33, 1,  false, 12 ] ],
-    [ [ 3, 2016 ],  [ 2016, 3, 5 ],   [ 78, 33, 1,  false, 27 ] ],
-    [ [ 4, 2016 ],  [ 2016, 3, 20 ],  [ 78, 33, 2,  false, 12 ] ],
-    [ [ 5, 2016 ],  [ 2016, 4, 4 ],   [ 78, 33, 2,  false, 27 ] ],
-    [ [ 6, 2016 ],  [ 2016, 4, 19 ],  [ 78, 33, 3,  false, 13 ] ],
-    [ [ 7, 2016 ],  [ 2016, 5, 5 ],   [ 78, 33, 3,  false, 29 ] ],
-    [ [ 8, 2016 ],  [ 2016, 5, 20 ],  [ 78, 33, 4,  false, 14 ] ],
-    [ [ 9, 2016 ],  [ 2016, 6, 5 ],   [ 78, 33, 5,  false,  1 ] ],
-    [ [ 10, 2016 ], [ 2016, 6, 21 ],  [ 78, 33, 5,  false, 17 ] ],
-    [ [ 11, 2016 ], [ 2016, 7, 7 ],   [ 78, 33, 6,  false,  4 ] ],
-    [ [ 12, 2016 ], [ 2016, 7, 22 ],  [ 78, 33, 6,  false, 19 ] ],
-    [ [ 13, 2016 ], [ 2016, 8, 7 ],   [ 78, 33, 7,  false,  5 ] ],
-    [ [ 14, 2016 ], [ 2016, 8, 23 ],  [ 78, 33, 7,  false, 21 ] ],
-    [ [ 15, 2016 ], [ 2016, 9, 7 ],   [ 78, 33, 8,  false,  7 ] ],
-    [ [ 16, 2016 ], [ 2016, 9, 22 ],  [ 78, 33, 8,  false, 22 ] ],
-    [ [ 17, 2016 ], [ 2016, 10, 8 ],  [ 78, 33, 9,  false,  8 ] ],
-    [ [ 18, 2016 ], [ 2016, 10, 23 ], [ 78, 33, 9,  false, 23 ] ],
-    [ [ 19, 2016 ], [ 2016, 11, 7 ],  [ 78, 33, 10, false,  8 ] ],
-    [ [ 20, 2016 ], [ 2016, 11, 22 ], [ 78, 33, 10, false, 23 ] ],
-    [ [ 21, 2016 ], [ 2016, 12, 7 ],  [ 78, 33, 11, false,  9 ] ],
-    [ [ 22, 2016 ], [ 2016, 12, 21 ], [ 78, 33, 11, false, 23 ] ],
-    [ [ 23, 2016 ], [ 2017, 1, 5 ],   [ 78, 33, 12, false,  8 ] ],
-    [ [ 24, 2016 ], [ 2017, 1, 20 ],  [ 78, 33, 12, false, 23 ] ]
+    [[1, 2016],  [2016, 2, 4],   [78, 32, 12, false, 26]],
+    [[2, 2016],  [2016, 2, 19],  [78, 33, 1,  false, 12]],
+    [[3, 2016],  [2016, 3, 5],   [78, 33, 1,  false, 27]],
+    [[4, 2016],  [2016, 3, 20],  [78, 33, 2,  false, 12]],
+    [[5, 2016],  [2016, 4, 4],   [78, 33, 2,  false, 27]],
+    [[6, 2016],  [2016, 4, 19],  [78, 33, 3,  false, 13]],
+    [[7, 2016],  [2016, 5, 5],   [78, 33, 3,  false, 29]],
+    [[8, 2016],  [2016, 5, 20],  [78, 33, 4,  false, 14]],
+    [[9, 2016],  [2016, 6, 5],   [78, 33, 5,  false,  1]],
+    [[10, 2016], [2016, 6, 21],  [78, 33, 5,  false, 17]],
+    [[11, 2016], [2016, 7, 7],   [78, 33, 6,  false,  4]],
+    [[12, 2016], [2016, 7, 22],  [78, 33, 6,  false, 19]],
+    [[13, 2016], [2016, 8, 7],   [78, 33, 7,  false,  5]],
+    [[14, 2016], [2016, 8, 23],  [78, 33, 7,  false, 21]],
+    [[15, 2016], [2016, 9, 7],   [78, 33, 8,  false,  7]],
+    [[16, 2016], [2016, 9, 22],  [78, 33, 8,  false, 22]],
+    [[17, 2016], [2016, 10, 8],  [78, 33, 9,  false,  8]],
+    [[18, 2016], [2016, 10, 23], [78, 33, 9,  false, 23]],
+    [[19, 2016], [2016, 11, 7],  [78, 33, 10, false,  8]],
+    [[20, 2016], [2016, 11, 22], [78, 33, 10, false, 23]],
+    [[21, 2016], [2016, 12, 7],  [78, 33, 11, false,  9]],
+    [[22, 2016], [2016, 12, 21], [78, 33, 11, false, 23]],
+    [[23, 2016], [2017, 1, 5],   [78, 33, 12, false,  8]],
+    [[24, 2016], [2017, 1, 20],  [78, 33, 12, false, 23]]
   ]
 
   describe('solarTerm', function () {
-    let cal = new CalendarChinese()
+    const cal = new CalendarChinese()
     tests.forEach(function (test) {
-      let t = test[0][0]
-      let y = test[0][1]
+      const t = test[0][0]
+      const y = test[0][1]
       it(y + ' ' + t, function () {
-        let st = cal.solarTerm(t, y)
+        const st = cal.solarTerm(t, y)
         // converting to Gregorian
-        let gre = cal.fromJDE(st).toGregorian()
+        const gre = cal.fromJDE(st).toGregorian()
         assert.deepStrictEqual(cal.get(), test[2])
         assert.deepStrictEqual([gre.year, gre.month, gre.day], test[1])
       })
@@ -191,34 +191,34 @@ describe('#CalendarChinese', function () {
   })
 
   describe('majorSolarTerm', function () {
-    let cal = new CalendarChinese()
+    const cal = new CalendarChinese()
     tests.forEach(function (test, idx) {
       if (idx % 2 === 0) return
 
-      let t = Math.floor(test[0][0] / 2)
-      let y = test[0][1]
+      const t = Math.floor(test[0][0] / 2)
+      const y = test[0][1]
 
       it(y + ' ' + t, function () {
-        let st = cal.majorSolarTerm(t, y)
+        const st = cal.majorSolarTerm(t, y)
         // converting to Gregorian
-        let gre = cal.fromJDE(st).toGregorian()
+        const gre = cal.fromJDE(st).toGregorian()
         assert.deepStrictEqual([gre.year, gre.month, gre.day], test[1])
       })
     })
   })
 
   describe('minorSolarTerm', function () {
-    let cal = new CalendarChinese()
+    const cal = new CalendarChinese()
     tests.forEach(function (test, idx) {
       if (idx % 2 === 1) return
 
-      let t = Math.floor(test[0][0] / 2) + 1
-      let y = test[0][1]
+      const t = Math.floor(test[0][0] / 2) + 1
+      const y = test[0][1]
 
       it(y + ' ' + t, function () {
-        let st = cal.minorSolarTerm(t, y)
+        const st = cal.minorSolarTerm(t, y)
         // converting to Gregorian
-        let gre = cal.fromJDE(st).toGregorian()
+        const gre = cal.fromJDE(st).toGregorian()
         assert.deepStrictEqual([gre.year, gre.month, gre.day], test[1])
       })
     })
@@ -252,9 +252,9 @@ describe('#CalendarChinese', function () {
     ]
 
     describe('fromGregorian', function () {
-      let cal = new CalendarChinese()
+      const cal = new CalendarChinese()
       tests.forEach(function (t) {
-        let [y, m, d] = t.d
+        const [y, m, d] = t.d
         it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
           assert.deepStrictEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
@@ -264,10 +264,10 @@ describe('#CalendarChinese', function () {
 
     describe('toGregorian', function () {
       tests.forEach(function (t) {
-        let [cycle, year, month, leap, day] = t.ch
+        const [cycle, year, month, leap, day] = t.ch
         it(t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'), function () {
-          let cal = new CalendarChinese(cycle, year, month, leap, day)
-          let res = cal.toGregorian()
+          const cal = new CalendarChinese(cycle, year, month, leap, day)
+          const res = cal.toGregorian()
           assert.deepStrictEqual([res.year, res.month, res.day], t.d)
         })
       })

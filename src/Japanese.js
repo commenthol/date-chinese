@@ -9,8 +9,10 @@ import CalendarChinese from './Chinese'
  * @see http://law.e-gov.go.jp/htmldata/M19/M19CO051.html
  */
 const UTC_DATES = [
-  { date: new Date('1888-02-11T15:00:00.000Z'), // 1888-02-12T00:00:00+0900
-    shift: 9 / 24 } // +9:00:00h (135° East) Japanese standard meridian
+  {
+    date: new Date('1888-02-11T15:00:00.000Z'), // 1888-02-12T00:00:00+0900
+    shift: 9 / 24
+  } // +9:00:00h (135° East) Japanese standard meridian
 ]
 
 /**
@@ -47,7 +49,7 @@ export default class CalendarJapanese extends CalendarChinese {
    * @return {Number} timeshift in fraction of day
    */
   timeshiftUTC (gcal) {
-    let date = gcal.toDate()
+    const date = gcal.toDate()
     for (var i in UTC_DATES) {
       if (date >= UTC_DATES[i].date) {
         return UTC_DATES[i].shift

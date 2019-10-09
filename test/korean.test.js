@@ -55,9 +55,9 @@ describe('#CalendarKorean', function () {
     ]
 
     describe('fromGregorian', function () {
-      let cal = new CalendarKorean()
+      const cal = new CalendarKorean()
       tests.forEach(function (t) {
-        let [y, m, d] = t.d
+        const [y, m, d] = t.d
         it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
           assert.deepStrictEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
@@ -67,10 +67,10 @@ describe('#CalendarKorean', function () {
 
     describe('toGregorian', function () {
       tests.forEach(function (t) {
-        let [cycle, year, month, leap, day] = t.ch
+        const [cycle, year, month, leap, day] = t.ch
         it(t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'), function () {
-          let cal = new CalendarKorean(cycle, year, month, leap, day)
-          let res = cal.toGregorian()
+          const cal = new CalendarKorean(cycle, year, month, leap, day)
+          const res = cal.toGregorian()
           assert.deepStrictEqual([res.year, res.month, res.day], t.d)
         })
       })

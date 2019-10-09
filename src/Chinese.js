@@ -107,7 +107,7 @@ export default class CalendarChinese {
    * @return {Object} this
    */
   fromGregorian (year, month, day) {
-    let j = this.midnight(new julian.CalendarGregorian(year, month, day).toJDE())
+    const j = this.midnight(new julian.CalendarGregorian(year, month, day).toJDE())
     if (month === 1 && day <= 20) year-- // chinese new year never starts before 20/01
     this._from(j, year)
     return this
@@ -120,7 +120,7 @@ export default class CalendarChinese {
    * @return {Object} this
    */
   fromDate (date) {
-    let j = this.midnight(new julian.CalendarGregorian().fromDate(date).toJDE())
+    const j = this.midnight(new julian.CalendarGregorian().fromDate(date).toJDE())
     this._from(j, date.getFullYear())
     return this
   }
@@ -132,8 +132,8 @@ export default class CalendarChinese {
    * @return {Object} this
    */
   fromJDE (jde) {
-    let j = this.midnight(jde)
-    let gc = new julian.CalendarGregorian().fromJDE(j)
+    const j = this.midnight(jde)
+    const gc = new julian.CalendarGregorian().fromJDE(j)
     if (gc.month === 1 && gc.day < 20) gc.year-- // chinese new year never starts before 20/01
     this._from(j, gc.year)
     return this
@@ -156,12 +156,12 @@ export default class CalendarChinese {
       nm = ny
     }
 
-    let years = 1.5 + (ny - this._epoch) / base.BesselianYear
+    const years = 1.5 + (ny - this._epoch) / base.BesselianYear
     this.cycle = 1 + Math.trunc((years - 1) / 60)
     this.year = 1 + Math.trunc((years - 1) % 60)
 
     this.month = this.inMajorSolarTerm(nm).term
-    let m = Math.round((nm - ny) / moonphase.meanLunarMonth)
+    const m = Math.round((nm - ny) / moonphase.meanLunarMonth)
     if (m === 0) {
       this.month = 1
       this.leap = false
@@ -188,8 +188,8 @@ export default class CalendarChinese {
    *   {Number} day - (int)
    */
   toGregorian (gyear) {
-    let jde = this.toJDE(gyear)
-    let gc = new julian.CalendarGregorian().fromJDE(jde + 0.5) // add 0.5 as day get truncated
+    const jde = this.toJDE(gyear)
+    const gc = new julian.CalendarGregorian().fromJDE(jde + 0.5) // add 0.5 as day get truncated
     return {
       year: gc.year,
       month: gc.month,
@@ -204,7 +204,7 @@ export default class CalendarChinese {
    * @return {Date} javascript date object in gregorian (preleptic) calendar
    */
   toDate (gyear) {
-    let jde = this.toJDE(gyear)
+    const jde = this.toJDE(gyear)
     return new julian.CalendarGregorian().fromJDE(toFixed(jde, 4)).toDate()
   }
 
@@ -215,13 +215,13 @@ export default class CalendarChinese {
    * @return {Number} date in JDE
    */
   toJDE (gyear) {
-    let years = gyear || this.yearFromEpochCycle()
-    let ny = this.newYear(years)
+    const years = gyear || this.yearFromEpochCycle()
+    const ny = this.newYear(years)
     let nm = ny
     if (this.month > 1) {
       nm = this.previousNewMoon(ny + this.month * 29)
-      let st = this.inMajorSolarTerm(nm).term
-      let lm = this.isLeapMonth(nm)
+      const st = this.inMajorSolarTerm(nm).term
+      const lm = this.isLeapMonth(nm)
 
       if (st > this.month) {
         nm = this.previousNewMoon(nm - 1)
@@ -232,7 +232,7 @@ export default class CalendarChinese {
     if (this.leap) {
       nm = this.nextNewMoon(nm + 1)
     }
-    let jde = nm + this.day - 1
+    const jde = nm + this.day - 1
     return jde
   }
 
@@ -256,8 +256,8 @@ export default class CalendarChinese {
    * @return {Number} truncated jde
    */
   midnight (jde) {
-    let gcal = new julian.CalendarGregorian().fromJDE(jde)
-    let ts = 0.5 - this.timeshiftUTC(gcal)
+    const gcal = new julian.CalendarGregorian().fromJDE(jde)
+    const ts = 0.5 - this.timeshiftUTC(gcal)
     let mn = Math.trunc(gcal.toJD() - ts) + ts
     mn = gcal.fromJD(mn).toJDE()
     if (toFixed(jde, 5) === toFixed(mn, 5) + 1) {
@@ -273,10 +273,10 @@ export default class CalendarChinese {
    * @returns {Number} major solar term part of that month
    */
   inMajorSolarTerm (jde) {
-    let lon = this._cache.lon[jde] || solar.apparentVSOP87(earth, jde).lon
+    const lon = this._cache.lon[jde] || solar.apparentVSOP87(earth, jde).lon
     this._cache.lon[jde] = lon
-    let lonDeg = lon * p - 1e-13
-    let term = (2 + Math.floor(lonDeg / 30)) % 12 + 1
+    const lonDeg = lon * p - 1e-13
+    const term = (2 + Math.floor(lonDeg / 30)) % 12 + 1
     return { term: term, lon: lonDeg }
   }
 
@@ -288,10 +288,10 @@ export default class CalendarChinese {
    * @returns {Boolean} `true` if previous new moon falls into same solar term
    */
   isLeapMonth (jde) {
-    let t1 = this.inMajorSolarTerm(jde)
-    let next = this.nextNewMoon(this.midnight(jde + lunarOffset))
-    let t2 = this.inMajorSolarTerm(next)
-    let r = (t1.term === t2.term)
+    const t1 = this.inMajorSolarTerm(jde)
+    const next = this.nextNewMoon(this.midnight(jde + lunarOffset))
+    const t2 = this.inMajorSolarTerm(next)
+    const r = (t1.term === t2.term)
     return r
   }
 
@@ -335,14 +335,14 @@ export default class CalendarChinese {
     gyear = Math.trunc(gyear)
     if (this._cache.ny[gyear]) return this._cache.ny[gyear]
 
-    let sue1 = this._cache.sue[gyear - 1] || solstice.december2(gyear - 1, earth)
-    let sue2 = this._cache.sue[gyear] || solstice.december2(gyear, earth)
+    const sue1 = this._cache.sue[gyear - 1] || solstice.december2(gyear - 1, earth)
+    const sue2 = this._cache.sue[gyear] || solstice.december2(gyear, earth)
     this._cache.sue[gyear - 1] = sue1
     this._cache.sue[gyear] = sue2
 
-    let m11n = this.previousNewMoon(this.midnight(sue2 + 1))
-    let m12 = this.nextNewMoon(this.midnight(sue1 + 1))
-    let m13 = this.nextNewMoon(this.midnight(m12 + lunarOffset))
+    const m11n = this.previousNewMoon(this.midnight(sue2 + 1))
+    const m12 = this.nextNewMoon(this.midnight(sue1 + 1))
+    const m13 = this.nextNewMoon(this.midnight(m12 + lunarOffset))
     this.leapSui = Math.round((m11n - m12) / moonphase.meanLunarMonth) === 12
     let ny = m13
 
@@ -384,8 +384,8 @@ export default class CalendarChinese {
    */
   solarTerm (term, gyear) {
     if (gyear && term <= 3) gyear--
-    let years = gyear || this.yearFromEpochCycle()
-    let lon = (((term + 20) % 24) * 15) % 360
+    const years = gyear || this.yearFromEpochCycle()
+    const lon = (((term + 20) % 24) * 15) % 360
     let st = solstice.longitude(years, earth, lon / p)
     st = this.midnight(st)
     return st
