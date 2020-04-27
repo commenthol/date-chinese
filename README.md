@@ -72,7 +72,7 @@ Use `set()` to reuse cached results.
 
 ### from Gregorian Date
 
-The timezone of the Gregorian Date is Chinese Standard Time (Bejing Time for years less than 1929).
+The timezone of the Gregorian Date is Chinese Standard Time (Beijing Time for years less than 1929).
 
 ```js
 const CalendarChinese = require('date-chinese')
