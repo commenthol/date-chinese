@@ -3,9 +3,8 @@
  * @license MIT
  */
 
-// import {julian} from 'astronomia' // TODO waiting for tree-shaking that works...
-import julian from 'astronomia/lib/julian'
-import CalendarChinese from './Chinese'
+import julian from 'astronomia/julian'
+import CalendarChinese from './Chinese.js'
 
 // Start of Korean Calendar in 2333 BCE (단군기원 http://ko.wikipedia.org/wiki/단기)
 const epochY = -2333
@@ -50,7 +49,7 @@ export default class CalendarKorean extends CalendarChinese {
    */
   timeshiftUTC (gcal) {
     const date = gcal.toDate()
-    for (var i in UTC_DATES) {
+    for (const i in UTC_DATES) {
       if (date >= UTC_DATES[i].date) {
         return UTC_DATES[i].shift
       }

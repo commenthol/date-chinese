@@ -1,31 +1,27 @@
-/* globals describe, it */
 /* eslint no-multi-spaces: 0 */
 
-'use strict'
-
-const assert = require('assert')
-const { julian } = require('astronomia')
-
-const { CalendarJapanese } = require('../src')
+import assert from 'assert'
+import { julian } from 'astronomia'
+import { CalendarJapanese } from '../src/index.js'
 
 process.env.TZ = 'Asia/Tokyo'
 
 describe('#CalendarJapanese', function () {
   describe('newYear', function () {
-    var tests = [
+    const tests = [
       '1887-01-24T00:00:56+0920',
       '1888-02-12T00:00:00+0900',
       '1986-02-09T00:00:00+0900'
     ]
-    var cal = new CalendarJapanese()
+    const cal = new CalendarJapanese()
     tests.forEach(function (t) {
-      var date = new Date(t)
+      const date = new Date(t)
       it(t, function () {
-        var y = date.getFullYear()
-        var jde = cal.newYear(y)
-        var res = new julian.CalendarGregorian().fromJDE(jde).toDate()
-        var td = new Date(t)
-        var err = Math.abs(+res - +td)
+        const y = date.getFullYear()
+        const jde = cal.newYear(y)
+        const res = new julian.CalendarGregorian().fromJDE(jde).toDate()
+        const td = new Date(t)
+        const err = Math.abs(+res - +td)
         // test max error 2sec
         assert.ok(err < 1000, res.toISOString() + ' !== ' + t)
       })
@@ -33,7 +29,7 @@ describe('#CalendarJapanese', function () {
   })
 
   describe('Gregorian', function () {
-    var tests = [
+    const tests = [
       { d: [-2636, 2, 15], ch: [1, 1, 1, false, 1] },
       { d: [-2635, 2, 15], ch: [1, 2, 1, false, 13] },
       { d: [1800, 1, 1], ch: [74, 56, 12, false, 6] },
@@ -81,7 +77,7 @@ describe('#CalendarJapanese', function () {
     })
   })
 
-  describe('24 Sekki', function (done) {
+  describe('24 Sekki', function () {
     // validated against http://eco.mtk.nao.ac.jp/koyomi/yoko/2016/rekiyou162.html.en
     const tests = {
       2015: [

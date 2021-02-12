@@ -1,4 +1,4 @@
-module.exports = [
+export const chineseNewYearFixtures = [
   '-002636-02-15T00:00:20+0746',
   '1833-02-20T00:00:20+0746',
   '1852-02-20T00:00:20+0746',

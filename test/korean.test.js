@@ -1,30 +1,26 @@
-/* globals describe, it */
 /* eslint no-multi-spaces: 0 */
 
-'use strict'
+import assert from 'assert'
+import { julian } from 'astronomia'
+import { CalendarKorean } from '../src/index.js'
 
-const assert = require('assert')
-const { julian } = require('astronomia')
-
-const { CalendarKorean } = require('../src')
-
-// process.env.TZ = 'Asia/Seoul'
+process.env.TZ = 'Asia/Seoul'
 
 describe('#CalendarKorean', function () {
   describe('newYear', function () {
-    var tests = [
+    const tests = [
       '1985-02-20T00:00:00+0900',
       '1986-02-09T00:00:00+0900'
     ]
-    var cal = new CalendarKorean()
+    const cal = new CalendarKorean()
     tests.forEach(function (t) {
-      var date = new Date(t)
+      const date = new Date(t)
       it(t, function () {
-        var y = date.getFullYear()
-        var jde = cal.newYear(y)
-        var res = new julian.CalendarGregorian().fromJDE(jde).toDate()
-        var td = new Date(t)
-        var err = Math.abs(+res - +td)
+        const y = date.getFullYear()
+        const jde = cal.newYear(y)
+        const res = new julian.CalendarGregorian().fromJDE(jde).toDate()
+        const td = new Date(t)
+        const err = Math.abs(+res - +td)
         // test max error 2sec
         assert.ok(err < 1000, res.toISOString() + ' !== ' + t)
       })
@@ -32,7 +28,7 @@ describe('#CalendarKorean', function () {
   })
 
   describe('Gregorian', function () {
-    var tests = [
+    const tests = [
       { d: [-2333, 1, 27], ch: [1,   1,  1, false,  1] },
       { d: [-2332, 2, 27], ch: [1,   2,  1, false, 13] },
       { d: [1980, 10, 28], ch: [72, 54,  9, false, 20] },

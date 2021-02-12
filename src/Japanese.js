@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import CalendarChinese from './Chinese'
+import CalendarChinese from './Chinese.js'
 
 /**
  * @see http://law.e-gov.go.jp/htmldata/M19/M19CO051.html
@@ -50,7 +50,7 @@ export default class CalendarJapanese extends CalendarChinese {
    */
   timeshiftUTC (gcal) {
     const date = gcal.toDate()
-    for (var i in UTC_DATES) {
+    for (const i in UTC_DATES) {
       if (date >= UTC_DATES[i].date) {
         return UTC_DATES[i].shift
       }
