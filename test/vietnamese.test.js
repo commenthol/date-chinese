@@ -1,32 +1,27 @@
-/* globals describe, it */
 /* eslint no-multi-spaces: 0 */
 
-'use strict'
-
-const assert = require('assert')
-const { julian } = require('astronomia')
-
-const { CalendarVietnamese } = require('../src')
-
+import assert from 'assert'
+import { julian } from 'astronomia'
+import { CalendarVietnamese } from '../src/index.js'
 // process.env.TZ = 'Asia/Ho_Chi_Minh'
 
 describe('#CalendarVietnamese', function () {
   describe('newYear', function () {
-    var tests = [
+    const tests = [
       '1967-02-09T00:00:00+0800',
       '1968-01-29T00:00:00+0700',
       '1985-01-21T00:00:00+0700', // this date is different to Chinese
       '1986-02-09T00:00:00+0700'
     ]
-    var cal = new CalendarVietnamese()
+    const cal = new CalendarVietnamese()
     tests.forEach(function (t) {
-      var date = new Date(t)
+      const date = new Date(t)
       it(t, function () {
-        var y = date.getFullYear()
-        var jde = cal.newYear(y)
-        var res = new julian.CalendarGregorian().fromJDE(jde).toDate()
-        var td = new Date(t)
-        var err = Math.abs(+res - +td)
+        const y = date.getFullYear()
+        const jde = cal.newYear(y)
+        const res = new julian.CalendarGregorian().fromJDE(jde).toDate()
+        const td = new Date(t)
+        const err = Math.abs(+res - +td)
         // test max error 2sec
         assert.ok(err < 1000, res.toISOString() + ' !== ' + t)
       })
@@ -34,7 +29,7 @@ describe('#CalendarVietnamese', function () {
   })
 
   describe('Gregorian', function () {
-    var tests = [
+    const tests = [
       { d: [1980, 10, 28], ch: [77, 57,  9, false, 20] },
       { d: [1984, 11, 20], ch: [78,  1, 10, false, 28] },
       { d: [1984, 12,  1], ch: [78,  1, 11, false,  9] },

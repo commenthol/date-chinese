@@ -1,9 +1,9 @@
 node_modules/
 coverage/
 .nyc_output/
-output/
 tmp/
 lib/
-es/
 *.log
 *.tgz
+.eslintcache
+

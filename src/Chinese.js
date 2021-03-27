@@ -3,13 +3,12 @@
  * @license MIT
  */
 
-// import {base, solstice, solar, moonphase, planetposition, julian, data} from 'astronomia' // TODO waiting for tree-shaking that works...
-import base from 'astronomia/lib/base'
-import solstice from 'astronomia/lib/solstice'
-import solar from 'astronomia/lib/solar'
-import moonphase from 'astronomia/lib/moonphase'
-import planetposition from 'astronomia/lib/planetposition'
-import julian from 'astronomia/lib/julian'
+import base from 'astronomia/base'
+import solstice from 'astronomia/solstice'
+import solar from 'astronomia/solar'
+import moonphase from 'astronomia/moonphase'
+import planetposition from 'astronomia/planetposition'
+import julian from 'astronomia/julian'
 import dataEarth from 'astronomia/data/vsop87Bearth'
 
 const earth = new planetposition.Planet(dataEarth)
@@ -80,6 +79,7 @@ export default class CalendarChinese {
       this.leap = leap
       this.day = day
     }
+    return this
   }
 
   /**
@@ -354,6 +354,22 @@ export default class CalendarChinese {
   }
 
   /**
+   * get solar term from solar longitude
+   *
+   * @param {Number} term - jiéqì solar term 1 .. 24
+   * @param {Number} [gyear] - (int) gregorian year
+   * @returns {Number} jde at midnight
+   */
+  solarTerm (term, gyear) {
+    if (gyear && term <= 3) gyear--
+    const years = gyear || this.yearFromEpochCycle()
+    const lon = (((term + 20) % 24) * 15) % 360
+    let st = solstice.longitude(years, earth, lon / p)
+    st = this.midnight(st)
+    return st
+  }
+
+  /**
    * get major solar term
    *
    * @param {Number} term - zhōngqì solar term Z1 .. Z12
@@ -373,22 +389,6 @@ export default class CalendarChinese {
    */
   minorSolarTerm (term, gyear) {
     return this.solarTerm(term * 2 - 1, gyear)
-  }
-
-  /**
-   * get solar term from solar longitude
-   *
-   * @param {Number} term - jiéqì solar term 1 .. 24
-   * @param {Number} [gyear] - (int) gregorian year
-   * @returns {Number} jde at midnight
-   */
-  solarTerm (term, gyear) {
-    if (gyear && term <= 3) gyear--
-    const years = gyear || this.yearFromEpochCycle()
-    const lon = (((term + 20) % 24) * 15) % 360
-    let st = solstice.longitude(years, earth, lon / p)
-    st = this.midnight(st)
-    return st
   }
 
   /**

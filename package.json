@@ -1,6 +1,6 @@
 {
   "name": "date-chinese",
-  "version": "1.0.7",
+  "version": "2.0.0-0",
   "description": "Chinese Calendar",
   "keywords": [
     "calendar",
@@ -26,81 +26,60 @@
   },
   "license": "MIT",
   "author": "commenthol <commenthol@gmail.com>",
-  "main": "lib",
+  "maintainers": [
+    "commenthol <commenthol@gmail.com>"
+  ],
+  "type": "module",
+  "main": "./lib/index.cjs",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "typings": "./types",
   "directories": {
+    "lib": "lib",
     "test": "test"
   },
   "scripts": {
     "all": "npm-run-all clean lint build test",
-    "build": "babel -d lib src",
-    "build:es5": "BABEL_ENV=es5 babel -d es src",
-    "clean": "rimraf lib es coverage .nyc_output",
+    "build": "rollup -c",
+    "clean": "rimraf lib coverage .nyc_output",
     "clean:all": "npm-run-all clean clean:node_modules",
     "clean:node_modules": "rimraf node_modules",
-    "coverage": "nyc -r text -r html npm test",
-    "lint": "eslint '**/*.js'",
+    "coverage": "c8 -r text -r html npm run test:ci",
+    "lint": "eslint \"**/*.js\"",
     "prepublishOnly": "npm run all",
-    "test": "mocha"
+    "readme": "markedpp --githubid -i README.md -o README.md",
+    "test": "npm-run-all test:ci test:ts",
+    "test:ci": "mocha",
+    "test:ts": "dtslint types"
   },
-  "babel": {
-    "env": {
-      "development": {
-        "presets": [
-          "env",
-          "stage-2"
-        ]
-      },
-      "es5": {
-        "presets": [
-          [
-            "env",
-            {
-              "targets": {
-                "node": "current",
-                "browsers": [
-                  "last 2 versions",
-                  "ie >= 11"
-                ]
-              },
-              "modules": false,
-              "loose": true
-            }
-          ],
-          "stage-2"
-        ]
-      }
-    }
-  },
-  "eslintConfig": {
-    "extends": "standard",
-    "plugins": [
-      "standard"
-    ]
+  "mocha": {
+    "checkLeaks": true,
+    "colors": true
   },
   "dependencies": {
-    "astronomia": "^2.1.1"
+    "astronomia": "^3.0.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-2": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "eslint": "^6.5.1",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-node": "^10.0.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "mocha": "^6.2.1",
+    "c8": "^7.6.0",
+    "dtslint": "^4.0.8",
+    "eslint": "^7.23.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "mocha": "^8.3.2",
     "npm-run-all": "^4.1.5",
-    "nyc": "^14.1.1",
-    "rimraf": "^3.0.0"
+    "rimraf": "^3.0.2",
+    "rollup": "^2.43.0",
+    "typescript": "^4.2.3"
   },
   "engines": {
-    "node": ">=4.0.0"
-  },
-  "maintainers": [
-    "commenthol <commenthol@gmail.com>"
-  ]
+    "node": ">=12.0.0"
+  }
 }

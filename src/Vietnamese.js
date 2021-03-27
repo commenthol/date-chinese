@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import CalendarChinese from './Chinese'
+import CalendarChinese from './Chinese.js'
 
 export default class CalendarVietnamese extends CalendarChinese {
   /**

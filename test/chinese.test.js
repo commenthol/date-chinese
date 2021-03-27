@@ -1,14 +1,11 @@
-/* globals describe, it */
 /* eslint no-multi-spaces: 0 */
 
-'use strict'
+import assert from 'assert'
+import { julian } from 'astronomia'
+import { CalendarChinese } from '../src/index.js'
+import { chineseNewYearFixtures } from './fixtures/newYear.js'
 
 process.env.TZ = 'Asia/Shanghai'
-
-const assert = require('assert')
-const { julian } = require('astronomia')
-
-const { CalendarChinese } = require('../src')
 
 function toDate (jde) {
   return new julian.Calendar().fromJDE(jde).toDate()
@@ -39,7 +36,7 @@ describe('#CalendarChinese', function () {
   })
 
   describe('conversions', function () {
-    var tests = [
+    const tests = [
       { date: new Date('1980-12-03T00:00:00+0800'), chinese: [77, 57, 10, false, 26] },
       { date: new Date('2017-01-28T00:00:00+0800'), chinese: [78, 34, 1, false, 1] },
       { date: new Date('1988-02-21T15:59:59.255Z'), chinese: [78, 5, 1, false, 6] } // special condition for `midnight` where jde === mn
@@ -48,7 +45,7 @@ describe('#CalendarChinese', function () {
     describe('from Date to chinese', function () {
       tests.forEach((test) => {
         it(test.date.toISOString(), function () {
-          var cal = new CalendarChinese().fromDate(test.date)
+          const cal = new CalendarChinese().fromDate(test.date)
           assert.deepStrictEqual(cal.get(), test.chinese)
         })
       })
@@ -61,7 +58,7 @@ describe('#CalendarChinese', function () {
 
       tests.forEach((test) => {
         it(test.date.toISOString(), function () {
-          var cal = new CalendarChinese()
+          const cal = new CalendarChinese()
           cal.set.apply(cal, test.chinese)
           // console.log(cal.toDate().toISOString()) // gap is ~ 3seconds
           assert.strictEqual(stripIsoSeconds(cal.toDate()), stripIsoSeconds(test.date))
@@ -71,7 +68,7 @@ describe('#CalendarChinese', function () {
       // {date: new Date('1935-04-02T12:00:00+0800'), chinese: [77, 12, 2, false, 29]} // special condition for `jde` where st > this.month
 
       it('special case at 1935-04-01', function () {
-        var cal = new CalendarChinese(77, 12, 2, false, 29)
+        const cal = new CalendarChinese(77, 12, 2, false, 29)
         // console.log(cal.toDate().toISOString())
         assert.strictEqual(stripIsoSeconds(cal.toDate()), '1935-04-01T15:59:00Z')
       })
@@ -104,17 +101,15 @@ describe('#CalendarChinese', function () {
   })
 
   describe('newYear', function () {
-    var tests = require('./fixtures/newYear')
-    // tests = ['1833-02-20T00:00:20+0746']
-    var cal = new CalendarChinese()
-    tests.forEach(function (t) {
-      var date = new Date(t)
+    const cal = new CalendarChinese()
+    chineseNewYearFixtures.forEach(function (t) {
+      const date = new Date(t)
       it(t, function () {
-        var y = date.getFullYear()
-        var jde = cal.newYear(y)
-        var res = new julian.CalendarGregorian().fromJDE(jde).toDate()
-        var td = new Date(t)
-        var err = Math.abs(+res - +td)
+        const y = date.getFullYear()
+        const jde = cal.newYear(y)
+        const res = new julian.CalendarGregorian().fromJDE(jde).toDate()
+        const td = new Date(t)
+        const err = Math.abs(+res - +td)
         // test max error 2sec
         assert.ok(err < 1000, res.toISOString() + ' !== ' + t)
       })
@@ -122,7 +117,7 @@ describe('#CalendarChinese', function () {
   })
 
   describe('qingming', function () {
-    var tests = [
+    const tests = [
       ['1740', { year: 1740, month: 4, day: 4 }, '1740-04-04T00:00:00.000Z'],
       ['1900', { year: 1900, month: 4, day: 5 }, '1900-04-05T00:00:00.000Z'],
       ['1981', { year: 1981, month: 4, day: 5 }, '1981-04-05T00:00:00.000Z'],
@@ -148,7 +143,7 @@ describe('#CalendarChinese', function () {
     })
   })
 
-  var tests = [
+  const tests = [
     [[1, 2016],  [2016, 2, 4],   [78, 32, 12, false, 26]],
     [[2, 2016],  [2016, 2, 19],  [78, 33, 1,  false, 12]],
     [[3, 2016],  [2016, 3, 5],   [78, 33, 1,  false, 27]],
@@ -225,7 +220,7 @@ describe('#CalendarChinese', function () {
   })
 
   describe('Gregorian', function () {
-    var tests = [
+    const tests = [
       { d: [-2636, 2, 15], ch: [1,   1,  1, false,  1] },
       { d: [-2635, 2, 15], ch: [1,   2,  1, false, 13] },
       { d: [0, 1, 1],      ch: [44, 56, 12, false,  9] },
