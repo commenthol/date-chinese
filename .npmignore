@@ -6,3 +6,5 @@ tmp/
 *.log
 *.tgz
 .*
+rollup.config.mjs
+types/t*
