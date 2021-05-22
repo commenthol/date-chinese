@@ -3,12 +3,7 @@
  * @license MIT
  */
 
-import base from 'astronomia/base'
-import solstice from 'astronomia/solstice'
-import solar from 'astronomia/solar'
-import moonphase from 'astronomia/moonphase'
-import planetposition from 'astronomia/planetposition'
-import julian from 'astronomia/julian'
+import { base, solstice, solar, moonphase, planetposition, julian } from 'astronomia'
 import dataEarth from 'astronomia/data/vsop87Bearth'
 
 const earth = new planetposition.Planet(dataEarth)

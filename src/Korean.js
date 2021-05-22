@@ -3,7 +3,7 @@
  * @license MIT
  */
 
-import julian from 'astronomia/julian'
+import { julian } from 'astronomia'
 import CalendarChinese from './Chinese.js'
 
 // Start of Korean Calendar in 2333 BCE (단군기원 http://ko.wikipedia.org/wiki/단기)
