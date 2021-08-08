@@ -4,9 +4,9 @@
  */
 
 import { base, solstice, solar, moonphase, planetposition, julian } from 'astronomia'
-import dataEarth from 'astronomia/data/vsop87Bearth'
+import { vsop87Bearth } from './vsop87Bearth.js'
 
-const earth = new planetposition.Planet(dataEarth)
+const earth = new planetposition.Planet(vsop87Bearth)
 const lunarOffset = moonphase.meanLunarMonth / 2
 const p = 180 / Math.PI
 
