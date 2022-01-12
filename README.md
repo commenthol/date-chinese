@@ -3,7 +3,8 @@
 > Chinese Calendar
 
 [![NPM version](https://badge.fury.io/js/date-chinese.svg)](https://www.npmjs.com/package/date-chinese/)
-[![Build Status](https://api.travis-ci.com/commenthol/date-chinese.svg?branch=master)](https://travis-ci.com/commenthol/date-chinese)
+[![Build Status](https://github.com/commenthol/date-chinese/workflows/CI/badge.svg?branch=master&event=push)](https://github.com/commenthol/date-chinese/actions/workflows/ci.yml?query=branch%3Amaster)
+
 
 Chinese Calendar calculations with conversion from/ to Gregorian Date.
 
