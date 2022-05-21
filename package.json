@@ -39,7 +39,7 @@
   },
   "main": "./lib/index.cjs",
   "module": "./src/index.js",
-  "typings": "./types",
+  "types": "./types",
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -53,7 +53,7 @@
     "clean:all": "npm-run-all clean clean:node_modules",
     "clean:node_modules": "rimraf node_modules",
     "coverage": "c8 -r text -r html npm run test:ci",
-    "lint": "eslint \"**/*.js\"",
+    "lint": "eslint --ext .js .",
     "prepublishOnly": "npm run all",
     "readme": "markedpp --githubid -i README.md -o README.md",
     "test": "npm-run-all test:ci test:ts",
@@ -65,22 +65,21 @@
     "colors": true
   },
   "dependencies": {
-    "astronomia": "^4.0.1"
+    "astronomia": "^4.1.0"
   },
   "devDependencies": {
-    "c8": "^7.8.0",
-    "dtslint": "^4.1.3",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
-    "eslint-plugin-standard": "^5.0.0",
-    "mocha": "^9.0.3",
+    "c8": "^7.11.3",
+    "dtslint": "^4.2.1",
+    "eslint": "^8.16.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "mocha": "^10.0.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
-    "rollup": "^2.56.1",
-    "typescript": "^4.3.5"
+    "rollup": "^2.74.1",
+    "typescript": "^4.6.4"
   },
   "engines": {
     "node": ">=12.0.0"

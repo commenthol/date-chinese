@@ -272,7 +272,7 @@ export default class CalendarChinese {
     this._cache.lon[jde] = lon
     const lonDeg = lon * p - 1e-13
     const term = (2 + Math.floor(lonDeg / 30)) % 12 + 1
-    return { term: term, lon: lonDeg }
+    return { term, lon: lonDeg }
   }
 
   /**
