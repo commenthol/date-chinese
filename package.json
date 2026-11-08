@@ -1,6 +1,6 @@
 {
   "name": "date-chinese",
-  "version": "2.1.4",
+  "version": "2.2.0-0",
   "description": "Chinese Calendar",
   "keywords": [
     "calendar",
@@ -32,6 +32,7 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./types/index.types.d.ts",
       "import": "./src/index.js",
       "require": "./lib/index.cjs"
     },
@@ -39,47 +40,47 @@
   },
   "main": "./lib/index.cjs",
   "module": "./src/index.js",
-  "types": "./types",
+  "types": "./types/index.types.d.ts",
   "directories": {
     "lib": "lib",
     "test": "test"
   },
   "scripts": {
-    "all": "npm-run-all clean lint build test",
+    "all": "run-s clean pretty lint types build test",
     "build": "rollup -c",
     "postbuild": "node scripts/postbuild.cjs",
-    "ci": "npm test",
-    "clean": "rimraf lib coverage .nyc_output",
-    "clean:all": "npm-run-all clean clean:node_modules",
+    "ci": "run-s all",
+    "clean": "rimraf lib types coverage .nyc_output",
+    "clean:all": "run-s clean clean:node_modules",
     "clean:node_modules": "rimraf node_modules",
-    "coverage": "c8 -r text -r html npm run test:ci",
-    "lint": "eslint --ext .js .",
+    "coverage": "c8 -r text -r html npm test",
+    "lint": "eslint src test",
     "prepublishOnly": "npm run all",
+    "pretty": "prettier -w src test",
     "readme": "markedpp --githubid -i README.md -o README.md",
-    "test": "npm-run-all test:ci test:ts",
-    "test:ci": "mocha",
-    "test:ts": "dtslint types"
+    "test": "mocha",
+    "types": "tsc -p tsconfig.json && tsc -p tsconfig.test.json"
   },
   "mocha": {
     "checkLeaks": true,
     "colors": true
   },
   "dependencies": {
-    "astronomia": "^4.1.0"
+    "astronomia": "^4.3.0"
   },
   "devDependencies": {
-    "c8": "^7.11.3",
-    "dtslint": "^4.2.1",
-    "eslint": "^8.16.0",
-    "eslint-config-standard": "^17.0.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-n": "^15.2.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "mocha": "^10.0.0",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.74.1",
-    "typescript": "^4.6.4"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.6",
+    "c8": "^12.0.0",
+    "eslint": "^10.14.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.14.0",
+    "mocha": "^12.0.3",
+    "npm-run-all2": "^9.0.4",
+    "prettier": "^3.9.10",
+    "rimraf": "^6.1.4",
+    "rollup": "^4.67.5",
+    "typescript": "^7.0.2"
   },
   "engines": {
     "node": ">=12.0.0"

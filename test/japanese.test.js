@@ -60,7 +60,10 @@ describe('#CalendarJapanese', function () {
         const [y, m, d] = t.d
         it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
-          assert.deepStrictEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
+          assert.deepStrictEqual(
+            [cal.cycle, cal.year, cal.month, cal.leap, cal.day],
+            t.ch
+          )
         })
       })
     })
@@ -68,11 +71,14 @@ describe('#CalendarJapanese', function () {
     describe('toGregorian', function () {
       tests.forEach(function (t) {
         const [cycle, year, month, leap, day] = t.ch
-        it(t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'), function () {
-          const cal = new CalendarJapanese(cycle, year, month, leap, day)
-          const res = cal.toGregorian()
-          assert.deepStrictEqual([res.year, res.month, res.day], t.d)
-        })
+        it(
+          t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'),
+          function () {
+            const cal = new CalendarJapanese(cycle, year, month, leap, day)
+            const res = cal.toGregorian()
+            assert.deepStrictEqual([res.year, res.month, res.day], t.d)
+          }
+        )
       })
     })
   })
@@ -80,19 +86,17 @@ describe('#CalendarJapanese', function () {
   describe('24 Sekki', function () {
     // validated against http://eco.mtk.nao.ac.jp/koyomi/yoko/2016/rekiyou162.html.en
     const tests = {
-      2015: [
-        { sekki: 17, exp: '2015-10-08T00:00:00+0900' }
-      ],
+      2015: [{ sekki: 17, exp: '2015-10-08T00:00:00+0900' }],
       2016: [
-        { sekki: 1,  exp: '2016-02-04T00:00:00+0900' },
-        { sekki: 2,  exp: '2016-02-19T00:00:00+0900' },
-        { sekki: 3,  exp: '2016-03-05T00:00:00+0900' },
-        { sekki: 4,  exp: '2016-03-20T00:00:00+0900' },
-        { sekki: 5,  exp: '2016-04-04T00:00:00+0900' },
-        { sekki: 6,  exp: '2016-04-20T00:00:00+0900' },
-        { sekki: 7,  exp: '2016-05-05T00:00:00+0900' },
-        { sekki: 8,  exp: '2016-05-20T00:00:00+0900' },
-        { sekki: 9,  exp: '2016-06-05T00:00:00+0900' },
+        { sekki: 1, exp: '2016-02-04T00:00:00+0900' },
+        { sekki: 2, exp: '2016-02-19T00:00:00+0900' },
+        { sekki: 3, exp: '2016-03-05T00:00:00+0900' },
+        { sekki: 4, exp: '2016-03-20T00:00:00+0900' },
+        { sekki: 5, exp: '2016-04-04T00:00:00+0900' },
+        { sekki: 6, exp: '2016-04-20T00:00:00+0900' },
+        { sekki: 7, exp: '2016-05-05T00:00:00+0900' },
+        { sekki: 8, exp: '2016-05-20T00:00:00+0900' },
+        { sekki: 9, exp: '2016-06-05T00:00:00+0900' },
         { sekki: 10, exp: '2016-06-21T00:00:00+0900' },
         { sekki: 11, exp: '2016-07-07T00:00:00+0900' },
         { sekki: 12, exp: '2016-07-22T00:00:00+0900' },
@@ -110,8 +114,8 @@ describe('#CalendarJapanese', function () {
         { sekki: 24, exp: '2017-01-20T00:00:00+0900' }
       ],
       2017: [
-        { sekki: 1,  exp: '2017-02-04T00:00:00+0900' },
-        { sekki: 5,  exp: '2017-04-04T00:00:00+0900' },
+        { sekki: 1, exp: '2017-02-04T00:00:00+0900' },
+        { sekki: 5, exp: '2017-04-04T00:00:00+0900' },
         { sekki: 12, exp: '2017-07-23T00:00:00+0900' }
       ]
     }
@@ -121,7 +125,10 @@ describe('#CalendarJapanese', function () {
         tests[year].forEach((test) => {
           it([year, test.sekki].join(' '), function () {
             const jde = cal.solarTerm(test.sekki, year)
-            const res = new julian.CalendarGregorian().fromJDE(jde).toDate().toISOString()
+            const res = new julian.CalendarGregorian()
+              .fromJDE(jde)
+              .toDate()
+              .toISOString()
             assert.strictEqual(res, new Date(test.exp).toISOString())
           })
         })

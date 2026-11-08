@@ -3,7 +3,14 @@
  * @license MIT
  */
 
-import { base, solstice, solar, moonphase, planetposition, julian } from 'astronomia'
+import {
+  base,
+  solstice,
+  solar,
+  moonphase,
+  planetposition,
+  julian
+} from 'astronomia'
 import { vsop87Bearth } from './vsop87Bearth.js'
 
 const earth = new planetposition.Planet(vsop87Bearth)
@@ -14,31 +21,32 @@ const p = 180 / Math.PI
 const epochY = -2636
 const epoch = new julian.CalendarGregorian(epochY, 2, 15).toJDE()
 
-function toYear (jde) {
+function toYear(jde) {
   return new julian.CalendarGregorian().fromJDE(jde).toYear()
 }
 
 // prevent rounding errors
-function toFixed (val, e) {
-  return parseFloat(val.toFixed(e), 10)
+function toFixed(val, e) {
+  return parseFloat(val.toFixed(e))
 }
 
 export default class CalendarChinese {
   /**
    * constructor
    *
-   * @param {Number|Array|Object} cycle - chinese 60 year cicle; if `{Array}` than `[cycle, year, ..., day]`
-   * @param {Number} year - chinese year of cycle
-   * @param {Number} month - chinese month
-   * @param {Number} leap - `true` if leap month
-   * @param {Number} day - chinese day
+   * @param {number|Array<number|boolean>|CalendarChinese} [cycle] - Chinese 60 year cycle; arrays contain `[cycle, year, month, leap, day]`
+   * @param {number} [year] - Chinese year of cycle
+   * @param {number} [month] - Chinese month
+   * @param {boolean|number} [leap] - `true` if leap month
+   * @param {number} [day] - Chinese day
    */
-  constructor (cycle, year, month, leap, day) {
+  constructor(cycle, year, month, leap, day) {
     this.set(cycle, year, month, leap, day)
 
     this._epochY = epochY
     this._epoch = epoch
-    this._cache = { // cache for results
+    this._cache = {
+      // cache for results
       lon: {},
       sue: {},
       ny: {}
@@ -46,15 +54,15 @@ export default class CalendarChinese {
   }
 
   /**
-   * set a new chinese date
+   * set a new Chinese date
    *
-   * @param {Number|Array|Object} cycle - chinese 60 year cicle; if `{Array}` than `[cycle, year, ..., day]`
-   * @param {Number} year - chinese year of cycle
-   * @param {Number} month - chinese month
-   * @param {Number} leap - `true` if leap month
-   * @param {Number} day - chinese day
+   * @param {number|Array<number|boolean>|CalendarChinese} [cycle] - Chinese 60 year cycle; arrays contain `[cycle, year, month, leap, day]`
+   * @param {number} [year] - Chinese year of cycle
+   * @param {number} [month] - Chinese month
+   * @param {boolean|number} [leap] - `true` if leap month
+   * @param {number} [day] - Chinese day
    */
-  set (cycle, year, month, leap, day) {
+  set(cycle, year, month, leap, day) {
     if (cycle instanceof CalendarChinese) {
       this.cycle = cycle.cycle
       this.year = cycle.year
@@ -79,30 +87,32 @@ export default class CalendarChinese {
 
   /**
    * returns chinese date
-   * @returns {Array}
+   * @returns {[number, number, number, boolean|number, number]}
    */
-  get () {
+  get() {
     return [this.cycle, this.year, this.month, this.leap, this.day]
   }
 
   /**
    * get Gregorian year from Epoch / Cycle
-   * @return {Number} year
+   * @returns {number} year
    */
-  yearFromEpochCycle () {
+  yearFromEpochCycle() {
     return this._epochY + (this.cycle - 1) * 60 + (this.year - 1)
   }
 
   /**
    * convert gregorian date to chinese calendar date
    *
-   * @param {Number} year - (int) year in Gregorian or Julian Calendar
-   * @param {Number} month - (int)
-   * @param {Number} day - needs to be in correct (chinese) timezone
-   * @return {Object} this
+   * @param {number} year - (int) year in Gregorian or Julian Calendar
+   * @param {number} month - (int)
+   * @param {number} day - needs to be in correct (Chinese) timezone
+   * @returns {this}
    */
-  fromGregorian (year, month, day) {
-    const j = this.midnight(new julian.CalendarGregorian(year, month, day).toJDE())
+  fromGregorian(year, month, day) {
+    const j = this.midnight(
+      new julian.CalendarGregorian(year, month, day).toJDE()
+    )
     if (month === 1 && day <= 20) year-- // chinese new year never starts before 20/01
     this._from(j, year)
     return this
@@ -112,10 +122,12 @@ export default class CalendarChinese {
    * convert date to chinese calendar date
    *
    * @param {Date} date - javascript date object
-   * @return {Object} this
+   * @returns {this}
    */
-  fromDate (date) {
-    const j = this.midnight(new julian.CalendarGregorian().fromDate(date).toJDE())
+  fromDate(date) {
+    const j = this.midnight(
+      new julian.CalendarGregorian().fromDate(date).toJDE()
+    )
     this._from(j, date.getFullYear())
     return this
   }
@@ -123,10 +135,10 @@ export default class CalendarChinese {
   /**
    * convert JDE to chinese calendar date
    *
-   * @param {Number} jde - date in JDE
-   * @return {Object} this
+   * @param {number} jde - date in JDE
+   * @returns {this}
    */
-  fromJDE (jde) {
+  fromJDE(jde) {
     const j = this.midnight(jde)
     const gc = new julian.CalendarGregorian().fromJDE(j)
     if (gc.month === 1 && gc.day < 20) gc.year-- // chinese new year never starts before 20/01
@@ -138,10 +150,11 @@ export default class CalendarChinese {
    * common conversion from JDE, year to chinese date
    *
    * @private
-   * @param {Number} j - date in JDE
-   * @param {Number} year - gregorian year
+   * @param {number} j - date in JDE
+   * @param {number} year - Gregorian year
+   * @returns {void}
    */
-  _from (j, year) {
+  _from(j, year) {
     let ny = this.newYear(year)
     if (ny > j) {
       ny = this.newYear(year - 1)
@@ -174,15 +187,12 @@ export default class CalendarChinese {
   }
 
   /**
-   * convert chinese date to gregorian date
+   * convert Chinese date to Gregorian date
    *
-   * @param {Number} [gyear] - (int) gregorian year
-   * @return {Object} date in gregorian (preleptic) calendar; Timezone is Standard Chinese / Bejing Time
-   *   {Number} year - (int)
-   *   {Number} month - (int)
-   *   {Number} day - (int)
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {{ year: number, month: number, day: number }} date in the proleptic Gregorian calendar; timezone is China Standard Time
    */
-  toGregorian (gyear) {
+  toGregorian(gyear) {
     const jde = this.toJDE(gyear)
     const gc = new julian.CalendarGregorian().fromJDE(jde + 0.5) // add 0.5 as day get truncated
     return {
@@ -195,10 +205,10 @@ export default class CalendarChinese {
   /**
    * convert chinese date to Date
    *
-   * @param {Number} [gyear] - (int) gregorian year
-   * @return {Date} javascript date object in gregorian (preleptic) calendar
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {Date} JavaScript date object in the proleptic Gregorian calendar
    */
-  toDate (gyear) {
+  toDate(gyear) {
     const jde = this.toJDE(gyear)
     return new julian.CalendarGregorian().fromJDE(toFixed(jde, 4)).toDate()
   }
@@ -206,10 +216,10 @@ export default class CalendarChinese {
   /**
    * convert chinese date to JDE
    *
-   * @param {Number} [gyear] - (int) gregorian year
-   * @return {Number} date in JDE
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {number} date in JDE
    */
-  toJDE (gyear) {
+  toJDE(gyear) {
     const years = gyear || this.yearFromEpochCycle()
     const ny = this.newYear(years)
     let nm = ny
@@ -234,10 +244,10 @@ export default class CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {CalendarGregorian} gcal - gregorian calendar date
-   * @return {Number} timeshift in fraction of day
+   * @param {{ toYear(): number, toDate(): Date }} gcal - Gregorian calendar date
+   * @returns {number} timeshift in fraction of day
    */
-  timeshiftUTC (gcal) {
+  timeshiftUTC(gcal) {
     if (gcal.toYear() >= 1929) {
       return 8 / 24 // +8:00:00h Standard China time zone (120° East)
     }
@@ -247,10 +257,10 @@ export default class CalendarChinese {
   /**
    * time/date at midnight - truncate `jde` to actual day
    *
-   * @param {Number} jde - julian ephemeris day
-   * @return {Number} truncated jde
+   * @param {number} jde - Julian ephemeris day
+   * @returns {number} truncated JDE
    */
-  midnight (jde) {
+  midnight(jde) {
     const gcal = new julian.CalendarGregorian().fromJDE(jde)
     const ts = 0.5 - this.timeshiftUTC(gcal)
     let mn = Math.trunc(gcal.toJD() - ts) + ts
@@ -265,38 +275,38 @@ export default class CalendarChinese {
    * get major solar term `Z1...Z12` for a given date in JDE
    *
    * @param {Number} jde - date of new moon
-   * @returns {Number} major solar term part of that month
+   * @returns {{ term: number, lon: number }} major solar term and longitude for that month
    */
-  inMajorSolarTerm (jde) {
-    const lon = this._cache.lon[jde] || solar.apparentVSOP87(earth, jde).lon
-    this._cache.lon[jde] = lon
-    const lonDeg = lon * p - 1e-13
-    const term = (2 + Math.floor(lonDeg / 30)) % 12 + 1
-    return { term, lon: lonDeg }
+  inMajorSolarTerm(jde) {
+    const lonRad = this._cache.lon[jde] || solar.apparentVSOP87(earth, jde).lon
+    this._cache.lon[jde] = lonRad
+    const lon = lonRad * p - 1e-13
+    const term = ((2 + Math.floor(lon / 30)) % 12) + 1
+    return { term, lon }
   }
 
   /**
    * Test if date `jde` is inside a leap month
    * `jde` and previous new moon need to have the same major solar term
    *
-   * @param {Number} jde - date of new moon
-   * @returns {Boolean} `true` if previous new moon falls into same solar term
+   * @param {number} jde - date of new moon
+   * @returns {boolean} `true` if previous new moon falls into same solar term
    */
-  isLeapMonth (jde) {
+  isLeapMonth(jde) {
     const t1 = this.inMajorSolarTerm(jde)
     const next = this.nextNewMoon(this.midnight(jde + lunarOffset))
     const t2 = this.inMajorSolarTerm(next)
-    const r = (t1.term === t2.term)
+    const r = t1.term === t2.term
     return r
   }
 
   /**
    * next new moon since `jde`
    *
-   * @param {Number} jde - date in julian ephemeris days
-   * @return {Number} jde at midnight
+   * @param {number} jde - date in Julian ephemeris days
+   * @returns {number} JDE at midnight
    */
-  nextNewMoon (jde) {
+  nextNewMoon(jde) {
     let nm = this.midnight(moonphase.newMoon(toYear(jde)))
     let cnt = 0
     while (nm < jde && cnt++ < 4) {
@@ -306,12 +316,12 @@ export default class CalendarChinese {
   }
 
   /**
-   * next new moon since `jde`
+   * previous new moon since `jde`
    *
-   * @param {Number} jde - date in julian ephemeris days
-   * @return {Number} jde at midnight
+   * @param {number} jde - date in Julian ephemeris days
+   * @returns {number} JDE at midnight
    */
-  previousNewMoon (jde) {
+  previousNewMoon(jde) {
     let nm = this.midnight(moonphase.newMoon(toYear(jde)))
     let cnt = 0
     while (nm > jde && cnt++ < 4) {
@@ -323,14 +333,15 @@ export default class CalendarChinese {
   /**
    * chinese new year for a given gregorian year
    *
-   * @param {Number} gyear - gregorian year (int)
-   * @param {Number} jde at midnight
+   * @param {number} gyear - Gregorian year (int)
+   * @returns {number} JDE at midnight
    */
-  newYear (gyear) {
+  newYear(gyear) {
     gyear = Math.trunc(gyear)
     if (this._cache.ny[gyear]) return this._cache.ny[gyear]
 
-    const sue1 = this._cache.sue[gyear - 1] || solstice.december2(gyear - 1, earth)
+    const sue1 =
+      this._cache.sue[gyear - 1] || solstice.december2(gyear - 1, earth)
     const sue2 = this._cache.sue[gyear] || solstice.december2(gyear, earth)
     this._cache.sue[gyear - 1] = sue1
     this._cache.sue[gyear] = sue2
@@ -351,11 +362,11 @@ export default class CalendarChinese {
   /**
    * get solar term from solar longitude
    *
-   * @param {Number} term - jiéqì solar term 1 .. 24
-   * @param {Number} [gyear] - (int) gregorian year
-   * @returns {Number} jde at midnight
+   * @param {number} term - jiéqì solar term 1 .. 24
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {number} JDE at midnight
    */
-  solarTerm (term, gyear) {
+  solarTerm(term, gyear) {
     if (gyear && term <= 3) gyear--
     const years = gyear || this.yearFromEpochCycle()
     const lon = (((term + 20) % 24) * 15) % 360
@@ -367,32 +378,32 @@ export default class CalendarChinese {
   /**
    * get major solar term
    *
-   * @param {Number} term - zhōngqì solar term Z1 .. Z12
-   * @param {Number} [gyear] - (int) gregorian year
-   * @returns {Number} jde at midnight
+   * @param {number} term - zhōngqì solar term Z1 .. Z12
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {number} JDE at midnight
    */
-  majorSolarTerm (term, gyear) {
+  majorSolarTerm(term, gyear) {
     return this.solarTerm(term * 2, gyear)
   }
 
   /**
    * get minor solar term
    *
-   * @param {Number} term - jiéqì solar term J1 .. J12
-   * @param {Number} [gyear] - (int) gregorian year
-   * @returns {Number} jde at midnight
+   * @param {number} term - jiéqì solar term J1 .. J12
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {number} JDE at midnight
    */
-  minorSolarTerm (term, gyear) {
+  minorSolarTerm(term, gyear) {
     return this.solarTerm(term * 2 - 1, gyear)
   }
 
   /**
    * Qı̄ngmíng - Pure brightness Festival
    *
-   * @param {Number} [gyear] - (int) gregorian year
-   * @returns {Number} jde at midnight
+   * @param {number} [gyear] - (int) Gregorian year
+   * @returns {number} JDE at midnight
    */
-  qingming (gyear) {
+  qingming(gyear) {
     return this.solarTerm(5, gyear)
   }
 }
