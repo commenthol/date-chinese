@@ -9,10 +9,10 @@ export default class CalendarVietnamese extends CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {CalendarGregorian} gcal - gregorian calendar date
-   * @return {Number} timeshift in fraction of day
+   * @param {{ toYear(): number, toDate(): Date }} gcal - Gregorian calendar date
+   * @returns {number} timeshift in fraction of day
    */
-  timeshiftUTC (gcal) {
+  timeshiftUTC(gcal) {
     if (gcal.toYear() >= 1968) {
       return 7 / 24 // +7:00:00h
     }

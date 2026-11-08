@@ -34,7 +34,14 @@ const UTC_DATES = [
 ]
 
 export default class CalendarKorean extends CalendarChinese {
-  constructor (cycle, year, month, leap, day) {
+  /**
+   * @param {number|number[]|CalendarChinese} [cycle]
+   * @param {number} [year]
+   * @param {number} [month]
+   * @param {boolean|number} [leap]
+   * @param {number} [day]
+   */
+  constructor(cycle, year, month, leap, day) {
     super(cycle, year, month, leap, day)
 
     this._epochY = epochY
@@ -44,10 +51,10 @@ export default class CalendarKorean extends CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {CalendarGregorian} gcal - gregorian calendar date
-   * @return {Number} timeshift in fraction of day
+   * @param {{ toYear(): number, toDate(): Date }} gcal - Gregorian calendar date
+   * @returns {number} timeshift in fraction of day
    */
-  timeshiftUTC (gcal) {
+  timeshiftUTC(gcal) {
     const date = gcal.toDate()
     for (const i in UTC_DATES) {
       if (date >= UTC_DATES[i].date) {

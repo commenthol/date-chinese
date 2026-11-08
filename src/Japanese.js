@@ -45,10 +45,10 @@ export default class CalendarJapanese extends CalendarChinese {
   /**
    * timeshift to UTC
    *
-   * @param {CalendarGregorian} gcal - gregorian calendar date
-   * @return {Number} timeshift in fraction of day
+   * @param {{ toYear(): number, toDate(): Date }} gcal - Gregorian calendar date
+   * @returns {number} timeshift in fraction of day
    */
-  timeshiftUTC (gcal) {
+  timeshiftUTC(gcal) {
     const date = gcal.toDate()
     for (const i in UTC_DATES) {
       if (date >= UTC_DATES[i].date) {

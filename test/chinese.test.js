@@ -7,7 +7,7 @@ import { chineseNewYearFixtures } from './fixtures/newYear.js'
 
 process.env.TZ = 'Asia/Shanghai'
 
-function toDate (jde) {
+function toDate(jde) {
   return new julian.Calendar().fromJDE(jde).toDate()
 }
 
@@ -37,9 +37,18 @@ describe('#CalendarChinese', function () {
 
   describe('conversions', function () {
     const tests = [
-      { date: new Date('1980-12-03T00:00:00+0800'), chinese: [77, 57, 10, false, 26] },
-      { date: new Date('2017-01-28T00:00:00+0800'), chinese: [78, 34, 1, false, 1] },
-      { date: new Date('1988-02-21T15:59:59.255Z'), chinese: [78, 5, 1, false, 6] } // special condition for `midnight` where jde === mn
+      {
+        date: new Date('1980-12-03T00:00:00+0800'),
+        chinese: [77, 57, 10, false, 26]
+      },
+      {
+        date: new Date('2017-01-28T00:00:00+0800'),
+        chinese: [78, 34, 1, false, 1]
+      },
+      {
+        date: new Date('1988-02-21T15:59:59.255Z'),
+        chinese: [78, 5, 1, false, 6]
+      } // special condition for `midnight` where jde === mn
     ]
 
     describe('from Date to chinese', function () {
@@ -52,7 +61,7 @@ describe('#CalendarChinese', function () {
     })
 
     describe('from chinese to Date', function () {
-      function stripIsoSeconds (date) {
+      function stripIsoSeconds(date) {
         return date.toISOString().replace(/\d{2}\.\d{3}Z$/, '00Z')
       }
 
@@ -61,7 +70,10 @@ describe('#CalendarChinese', function () {
           const cal = new CalendarChinese()
           cal.set.apply(cal, test.chinese)
           // console.log(cal.toDate().toISOString()) // gap is ~ 3seconds
-          assert.strictEqual(stripIsoSeconds(cal.toDate()), stripIsoSeconds(test.date))
+          assert.strictEqual(
+            stripIsoSeconds(cal.toDate()),
+            stripIsoSeconds(test.date)
+          )
         })
       })
 
@@ -70,7 +82,10 @@ describe('#CalendarChinese', function () {
       it('special case at 1935-04-01', function () {
         const cal = new CalendarChinese(77, 12, 2, false, 29)
         // console.log(cal.toDate().toISOString())
-        assert.strictEqual(stripIsoSeconds(cal.toDate()), '1935-04-01T15:59:00Z')
+        assert.strictEqual(
+          stripIsoSeconds(cal.toDate()),
+          '1935-04-01T15:59:00Z'
+        )
       })
     })
   })
@@ -88,7 +103,10 @@ describe('#CalendarChinese', function () {
       it(t.d, function () {
         const c = new julian.Calendar().fromDate(new Date(t.d))
         const mn = cal.midnight(c.toJDE())
-        assert.strictEqual(toDate(mn).toISOString(), new Date(t.exp).toISOString())
+        assert.strictEqual(
+          toDate(mn).toISOString(),
+          new Date(t.exp).toISOString()
+        )
       })
     })
 
@@ -96,7 +114,10 @@ describe('#CalendarChinese', function () {
       const c = new julian.Calendar().fromDate(new Date(tests[1].d))
       let mn = cal.midnight(c.toJDE())
       mn = cal.midnight(mn)
-      assert.strictEqual(toDate(mn).toISOString(), new Date(tests[1].exp).toISOString())
+      assert.strictEqual(
+        toDate(mn).toISOString(),
+        new Date(tests[1].exp).toISOString()
+      )
     })
   })
 
@@ -137,37 +158,133 @@ describe('#CalendarChinese', function () {
         // converting to Gregorian using jde
         const gcal = new julian.CalendarGregorian().fromJDE(qm)
         const ts = cal.timeshiftUTC(gcal)
-        const date = new Date(+(gcal.toDate()) + ts * 86400000)
+        const date = new Date(+gcal.toDate() + ts * 86400000)
         assert.strictEqual(date.toISOString(), test[2])
       })
     })
   })
 
   const tests = [
-    [[1, 2016],  [2016, 2, 4],   [78, 32, 12, false, 26]],
-    [[2, 2016],  [2016, 2, 19],  [78, 33, 1,  false, 12]],
-    [[3, 2016],  [2016, 3, 5],   [78, 33, 1,  false, 27]],
-    [[4, 2016],  [2016, 3, 20],  [78, 33, 2,  false, 12]],
-    [[5, 2016],  [2016, 4, 4],   [78, 33, 2,  false, 27]],
-    [[6, 2016],  [2016, 4, 19],  [78, 33, 3,  false, 13]],
-    [[7, 2016],  [2016, 5, 5],   [78, 33, 3,  false, 29]],
-    [[8, 2016],  [2016, 5, 20],  [78, 33, 4,  false, 14]],
-    [[9, 2016],  [2016, 6, 5],   [78, 33, 5,  false,  1]],
-    [[10, 2016], [2016, 6, 21],  [78, 33, 5,  false, 17]],
-    [[11, 2016], [2016, 7, 7],   [78, 33, 6,  false,  4]],
-    [[12, 2016], [2016, 7, 22],  [78, 33, 6,  false, 19]],
-    [[13, 2016], [2016, 8, 7],   [78, 33, 7,  false,  5]],
-    [[14, 2016], [2016, 8, 23],  [78, 33, 7,  false, 21]],
-    [[15, 2016], [2016, 9, 7],   [78, 33, 8,  false,  7]],
-    [[16, 2016], [2016, 9, 22],  [78, 33, 8,  false, 22]],
-    [[17, 2016], [2016, 10, 8],  [78, 33, 9,  false,  8]],
-    [[18, 2016], [2016, 10, 23], [78, 33, 9,  false, 23]],
-    [[19, 2016], [2016, 11, 7],  [78, 33, 10, false,  8]],
-    [[20, 2016], [2016, 11, 22], [78, 33, 10, false, 23]],
-    [[21, 2016], [2016, 12, 7],  [78, 33, 11, false,  9]],
-    [[22, 2016], [2016, 12, 21], [78, 33, 11, false, 23]],
-    [[23, 2016], [2017, 1, 5],   [78, 33, 12, false,  8]],
-    [[24, 2016], [2017, 1, 20],  [78, 33, 12, false, 23]]
+    [
+      [1, 2016],
+      [2016, 2, 4],
+      [78, 32, 12, false, 26]
+    ],
+    [
+      [2, 2016],
+      [2016, 2, 19],
+      [78, 33, 1, false, 12]
+    ],
+    [
+      [3, 2016],
+      [2016, 3, 5],
+      [78, 33, 1, false, 27]
+    ],
+    [
+      [4, 2016],
+      [2016, 3, 20],
+      [78, 33, 2, false, 12]
+    ],
+    [
+      [5, 2016],
+      [2016, 4, 4],
+      [78, 33, 2, false, 27]
+    ],
+    [
+      [6, 2016],
+      [2016, 4, 19],
+      [78, 33, 3, false, 13]
+    ],
+    [
+      [7, 2016],
+      [2016, 5, 5],
+      [78, 33, 3, false, 29]
+    ],
+    [
+      [8, 2016],
+      [2016, 5, 20],
+      [78, 33, 4, false, 14]
+    ],
+    [
+      [9, 2016],
+      [2016, 6, 5],
+      [78, 33, 5, false, 1]
+    ],
+    [
+      [10, 2016],
+      [2016, 6, 21],
+      [78, 33, 5, false, 17]
+    ],
+    [
+      [11, 2016],
+      [2016, 7, 7],
+      [78, 33, 6, false, 4]
+    ],
+    [
+      [12, 2016],
+      [2016, 7, 22],
+      [78, 33, 6, false, 19]
+    ],
+    [
+      [13, 2016],
+      [2016, 8, 7],
+      [78, 33, 7, false, 5]
+    ],
+    [
+      [14, 2016],
+      [2016, 8, 23],
+      [78, 33, 7, false, 21]
+    ],
+    [
+      [15, 2016],
+      [2016, 9, 7],
+      [78, 33, 8, false, 7]
+    ],
+    [
+      [16, 2016],
+      [2016, 9, 22],
+      [78, 33, 8, false, 22]
+    ],
+    [
+      [17, 2016],
+      [2016, 10, 8],
+      [78, 33, 9, false, 8]
+    ],
+    [
+      [18, 2016],
+      [2016, 10, 23],
+      [78, 33, 9, false, 23]
+    ],
+    [
+      [19, 2016],
+      [2016, 11, 7],
+      [78, 33, 10, false, 8]
+    ],
+    [
+      [20, 2016],
+      [2016, 11, 22],
+      [78, 33, 10, false, 23]
+    ],
+    [
+      [21, 2016],
+      [2016, 12, 7],
+      [78, 33, 11, false, 9]
+    ],
+    [
+      [22, 2016],
+      [2016, 12, 21],
+      [78, 33, 11, false, 23]
+    ],
+    [
+      [23, 2016],
+      [2017, 1, 5],
+      [78, 33, 12, false, 8]
+    ],
+    [
+      [24, 2016],
+      [2017, 1, 20],
+      [78, 33, 12, false, 23]
+    ]
   ]
 
   describe('solarTerm', function () {
@@ -221,29 +338,29 @@ describe('#CalendarChinese', function () {
 
   describe('Gregorian', function () {
     const tests = [
-      { d: [-2636, 2, 15], ch: [1,   1,  1, false,  1] },
-      { d: [-2635, 2, 15], ch: [1,   2,  1, false, 13] },
-      { d: [0, 1, 1],      ch: [44, 56, 12, false,  9] },
-      { d: [1, 1, 1],      ch: [44, 57, 11, false, 21] },
-      { d: [2, 1, 1],      ch: [44, 58, 12, false,  2] },
-      { d: [1582, 10, 15], ch: [71, 19,  9, false, 19] },
-      { d: [1582, 10, 16], ch: [71, 19,  9, false, 20] },
-      { d: [1582, 10, 17], ch: [71, 19,  9, false, 21] },
-      { d: [1600, 1, 1],   ch: [71, 36, 11, false, 16] },
-      { d: [1980, 10, 28], ch: [77, 57,  9, false, 20] },
-      { d: [1984, 11, 20], ch: [78,  1, 10, false, 28] },
-      { d: [1984, 12,  1], ch: [78,  1, 10, true,   9] },
-      { d: [1985,  1, 28], ch: [78,  1, 12, false,  8] },
-      { d: [1985,  2, 28], ch: [78,  2,  1, false,  9] },
-      { d: [1985,  7, 19], ch: [78,  2,  6, false,  2] },
-      { d: [1986, 12, 28], ch: [78,  3, 11, false, 27] },
-      { d: [2000,  1,  1], ch: [78, 16, 11, false, 25] },
-      { d: [2015,  7, 15], ch: [78, 32,  5, false, 30] },
+      { d: [-2636, 2, 15], ch: [1, 1, 1, false, 1] },
+      { d: [-2635, 2, 15], ch: [1, 2, 1, false, 13] },
+      { d: [0, 1, 1], ch: [44, 56, 12, false, 9] },
+      { d: [1, 1, 1], ch: [44, 57, 11, false, 21] },
+      { d: [2, 1, 1], ch: [44, 58, 12, false, 2] },
+      { d: [1582, 10, 15], ch: [71, 19, 9, false, 19] },
+      { d: [1582, 10, 16], ch: [71, 19, 9, false, 20] },
+      { d: [1582, 10, 17], ch: [71, 19, 9, false, 21] },
+      { d: [1600, 1, 1], ch: [71, 36, 11, false, 16] },
+      { d: [1980, 10, 28], ch: [77, 57, 9, false, 20] },
+      { d: [1984, 11, 20], ch: [78, 1, 10, false, 28] },
+      { d: [1984, 12, 1], ch: [78, 1, 10, true, 9] },
+      { d: [1985, 1, 28], ch: [78, 1, 12, false, 8] },
+      { d: [1985, 2, 28], ch: [78, 2, 1, false, 9] },
+      { d: [1985, 7, 19], ch: [78, 2, 6, false, 2] },
+      { d: [1986, 12, 28], ch: [78, 3, 11, false, 27] },
+      { d: [2000, 1, 1], ch: [78, 16, 11, false, 25] },
+      { d: [2015, 7, 15], ch: [78, 32, 5, false, 30] },
       { d: [2015, 12, 31], ch: [78, 32, 11, false, 21] },
-      { d: [2016,  2,  6], ch: [78, 32, 12, false, 28] },
-      { d: [2016,  2,  7], ch: [78, 32, 12, false, 29] },
-      { d: [2016,  2,  8], ch: [78, 33,  1, false,  1] },
-      { d: [2017,  9, 18], ch: [78, 34,  7, false, 28] }
+      { d: [2016, 2, 6], ch: [78, 32, 12, false, 28] },
+      { d: [2016, 2, 7], ch: [78, 32, 12, false, 29] },
+      { d: [2016, 2, 8], ch: [78, 33, 1, false, 1] },
+      { d: [2017, 9, 18], ch: [78, 34, 7, false, 28] }
     ]
 
     describe('fromGregorian', function () {
@@ -252,7 +369,10 @@ describe('#CalendarChinese', function () {
         const [y, m, d] = t.d
         it(t.d.join('-'), function () {
           cal.fromGregorian(y, m, d)
-          assert.deepStrictEqual([cal.cycle, cal.year, cal.month, cal.leap, cal.day], t.ch)
+          assert.deepStrictEqual(
+            [cal.cycle, cal.year, cal.month, cal.leap, cal.day],
+            t.ch
+          )
         })
       })
     })
@@ -260,11 +380,14 @@ describe('#CalendarChinese', function () {
     describe('toGregorian', function () {
       tests.forEach(function (t) {
         const [cycle, year, month, leap, day] = t.ch
-        it(t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'), function () {
-          const cal = new CalendarChinese(cycle, year, month, leap, day)
-          const res = cal.toGregorian()
-          assert.deepStrictEqual([res.year, res.month, res.day], t.d)
-        })
+        it(
+          t.d.join('-') + ' ' + [cycle, year, month, leap, day].join('-'),
+          function () {
+            const cal = new CalendarChinese(cycle, year, month, leap, day)
+            const res = cal.toGregorian()
+            assert.deepStrictEqual([res.year, res.month, res.day], t.d)
+          }
+        )
       })
     })
   })
