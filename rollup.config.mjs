@@ -5,6 +5,9 @@ export default {
     format: 'cjs',
     entryFileNames: '[name].cjs',
     preserveModules: true,
-    exports: 'auto'
+    exports: 'auto',
+    // astronomia's CommonJS data files set __esModule and keep the data on
+    // .default; 'compat' reads it from there instead of the whole module
+    interop: 'compat'
   }
 }
