@@ -360,7 +360,14 @@ describe('#CalendarChinese', function () {
       { d: [2016, 2, 6], ch: [78, 32, 12, false, 28] },
       { d: [2016, 2, 7], ch: [78, 32, 12, false, 29] },
       { d: [2016, 2, 8], ch: [78, 33, 1, false, 1] },
-      { d: [2017, 9, 18], ch: [78, 34, 7, false, 28] }
+      { d: [2017, 9, 18], ch: [78, 34, 7, false, 28] },
+      // 2033: month 8 has no major solar term but the sui has only 12 months
+      { d: [2033, 8, 25], ch: [78, 50, 8, false, 1] },
+      { d: [2033, 9, 8], ch: [78, 50, 8, false, 15] },
+      { d: [2033, 9, 23], ch: [78, 50, 9, false, 1] },
+      { d: [2033, 11, 22], ch: [78, 50, 11, false, 1] },
+      { d: [2033, 12, 22], ch: [78, 50, 11, true, 1] },
+      { d: [2034, 2, 19], ch: [78, 51, 1, false, 1] }
     ]
 
     describe('fromGregorian', function () {

@@ -9,6 +9,8 @@ export default class CalendarChinese {
         lon: {};
         sue: {};
         ny: {};
+        m11: {};
+        leap: {};
     };
     cycle: any;
     year: any;
@@ -132,12 +134,46 @@ export default class CalendarChinese {
     };
     /**
      * Test if date `jde` is inside a leap month
-     * `jde` and previous new moon need to have the same major solar term
+     * The leap month is the first month without a major solar term in a sui
+     * with 13 months.
      *
      * @param {number} jde - date of new moon
-     * @returns {boolean} `true` if previous new moon falls into same solar term
+     * @returns {boolean} `true` if month is the leap month of its sui
      */
     isLeapMonth(jde: number): boolean;
+    /**
+     * Test if month starting at `jde` holds no major solar term
+     *
+     * @private
+     * @param {number} jde - date of new moon
+     * @returns {boolean}
+     */
+    private _hasNoMajorTerm;
+    /**
+     * start of month 11, the month which holds the december solstice
+     *
+     * @private
+     * @param {number} gyear - Gregorian year (int)
+     * @returns {number} JDE at midnight
+     */
+    private _month11;
+    /**
+     * find the sui (span from one month 11 to the next) which holds `jde`
+     *
+     * @private
+     * @param {number} jde - date in JDE
+     * @returns {{ gyear: number, m11: number }} Gregorian year and start of month 11 of that sui
+     */
+    private _sui;
+    /**
+     * Only a sui with 13 months has a leap month. It is the first month
+     * without a major solar term.
+     *
+     * @private
+     * @param {number} gyear - Gregorian year (int) where the sui starts
+     * @returns {number} index of leap month counted from month 11; 0 if none
+     */
+    private _leapIndex;
     /**
      * next new moon since `jde`
      *
