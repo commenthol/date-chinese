@@ -44,7 +44,9 @@ describe('#CalendarKorean', function () {
       { d: [2016, 2, 6], ch: [73, 29, 12, false, 28] },
       { d: [2016, 2, 7], ch: [73, 29, 12, false, 29] },
       { d: [2016, 2, 8], ch: [73, 30, 1, false, 1] },
-      { d: [2017, 9, 18], ch: [73, 31, 7, false, 28] }
+      { d: [2017, 9, 18], ch: [73, 31, 7, false, 28] },
+      { d: [2033, 9, 8], ch: [73, 47, 8, false, 15] },
+      { d: [2033, 12, 22], ch: [73, 47, 11, true, 1] }
     ]
 
     describe('fromGregorian', function () {

@@ -49,7 +49,9 @@ export default class CalendarChinese {
       // cache for results
       lon: {},
       sue: {},
-      ny: {}
+      ny: {},
+      m11: {},
+      leap: {}
     }
   }
 
@@ -168,20 +170,13 @@ export default class CalendarChinese {
     this.cycle = 1 + Math.trunc((years - 1) / 60)
     this.year = 1 + Math.trunc((years - 1) % 60)
 
-    this.month = this.inMajorSolarTerm(nm).term
-    const m = Math.round((nm - ny) / moonphase.meanLunarMonth)
-    if (m === 0) {
-      this.month = 1
-      this.leap = false
-    } else {
-      this.leap = this.isLeapMonth(nm)
-    }
-
-    if (m > this.month) {
-      this.month = m
-    } else if (this.leap) {
-      this.month--
-    }
+    // count the months from month 11 which holds the december solstice
+    const { gyear, m11 } = this._sui(nm)
+    const leapIndex = this._leapIndex(gyear)
+    let m = Math.round((nm - m11) / moonphase.meanLunarMonth)
+    this.leap = leapIndex > 0 && m === leapIndex
+    if (leapIndex > 0 && m >= leapIndex) m--
+    this.month = ((m + 10) % 12) + 1
 
     this.day = 1 + Math.trunc(toFixed(j, 3) - toFixed(nm, 3))
   }
@@ -220,22 +215,15 @@ export default class CalendarChinese {
    * @returns {number} date in JDE
    */
   toJDE(gyear) {
-    const years = gyear || this.yearFromEpochCycle()
-    const ny = this.newYear(years)
-    let nm = ny
-    if (this.month > 1) {
-      nm = this.previousNewMoon(ny + this.month * 29)
-      const st = this.inMajorSolarTerm(nm).term
-      const lm = this.isLeapMonth(nm)
-
-      if (st > this.month) {
-        nm = this.previousNewMoon(nm - 1)
-      } else if (st < this.month || (lm && !this.leap)) {
-        nm = this.nextNewMoon(nm + 1)
-      }
-    }
-    if (this.leap) {
-      nm = this.nextNewMoon(nm + 1)
+    const years = Math.trunc(gyear || this.yearFromEpochCycle())
+    // months 11 and 12 belong to the sui which starts in `years`
+    const suiYear = this.month >= 11 ? years : years - 1
+    const leapIndex = this._leapIndex(suiYear)
+    let m = (this.month + 1) % 12 // months since month 11
+    if (this.leap || (leapIndex > 0 && m >= leapIndex)) m++
+    let nm = this._month11(suiYear)
+    for (let i = 0; i < m; i++) {
+      nm = this.nextNewMoon(this.midnight(nm + lunarOffset))
     }
     const jde = nm + this.day - 1
     return jde
@@ -287,17 +275,100 @@ export default class CalendarChinese {
 
   /**
    * Test if date `jde` is inside a leap month
-   * `jde` and previous new moon need to have the same major solar term
+   * The leap month is the first month without a major solar term in a sui
+   * with 13 months.
    *
    * @param {number} jde - date of new moon
-   * @returns {boolean} `true` if previous new moon falls into same solar term
+   * @returns {boolean} `true` if month is the leap month of its sui
    */
   isLeapMonth(jde) {
+    const { gyear, m11 } = this._sui(jde)
+    const leapIndex = this._leapIndex(gyear)
+    return (
+      leapIndex > 0 &&
+      Math.round((jde - m11) / moonphase.meanLunarMonth) === leapIndex
+    )
+  }
+
+  /**
+   * Test if month starting at `jde` holds no major solar term
+   *
+   * @private
+   * @param {number} jde - date of new moon
+   * @returns {boolean}
+   */
+  _hasNoMajorTerm(jde) {
     const t1 = this.inMajorSolarTerm(jde)
     const next = this.nextNewMoon(this.midnight(jde + lunarOffset))
     const t2 = this.inMajorSolarTerm(next)
-    const r = t1.term === t2.term
-    return r
+    return t1.term === t2.term
+  }
+
+  /**
+   * start of month 11, the month which holds the december solstice
+   *
+   * @private
+   * @param {number} gyear - Gregorian year (int)
+   * @returns {number} JDE at midnight
+   */
+  _month11(gyear) {
+    if (this._cache.m11[gyear]) return this._cache.m11[gyear]
+    const sue = this._cache.sue[gyear] || solstice.december2(gyear, earth)
+    this._cache.sue[gyear] = sue
+    const day = this.midnight(sue)
+    // previousNewMoon may return an earlier new moon; step to the last one
+    let m11 = this.previousNewMoon(day)
+    let next = this.nextNewMoon(this.midnight(m11 + lunarOffset))
+    while (next <= day) {
+      m11 = next
+      next = this.nextNewMoon(this.midnight(m11 + lunarOffset))
+    }
+    this._cache.m11[gyear] = m11
+    return m11
+  }
+
+  /**
+   * find the sui (span from one month 11 to the next) which holds `jde`
+   *
+   * @private
+   * @param {number} jde - date in JDE
+   * @returns {{ gyear: number, m11: number }} Gregorian year and start of month 11 of that sui
+   */
+  _sui(jde) {
+    let gyear = new julian.CalendarGregorian().fromJDE(jde).year
+    let m11 = this._month11(gyear)
+    if (m11 > jde) {
+      gyear--
+      m11 = this._month11(gyear)
+    }
+    return { gyear, m11 }
+  }
+
+  /**
+   * Only a sui with 13 months has a leap month. It is the first month
+   * without a major solar term.
+   *
+   * @private
+   * @param {number} gyear - Gregorian year (int) where the sui starts
+   * @returns {number} index of leap month counted from month 11; 0 if none
+   */
+  _leapIndex(gyear) {
+    if (gyear in this._cache.leap) return this._cache.leap[gyear]
+    const m11 = this._month11(gyear)
+    const next = this._month11(gyear + 1)
+    let leapIndex = 0
+    if (Math.round((next - m11) / moonphase.meanLunarMonth) === 13) {
+      let nm = m11
+      for (let i = 1; i < 13; i++) {
+        nm = this.nextNewMoon(this.midnight(nm + lunarOffset))
+        if (this._hasNoMajorTerm(nm)) {
+          leapIndex = i
+          break
+        }
+      }
+    }
+    this._cache.leap[gyear] = leapIndex
+    return leapIndex
   }
 
   /**
